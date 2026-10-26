@@ -112,6 +112,22 @@ def buscar_cliente_por_id(cliente_id: int) -> Optional[Dict[str, Any]]:
     return dict(row) if row else None
 
 
+def atualizar_endereco_cliente(cliente_id: int, novo_endereco: str) -> bool:
+    """Atualiza o endereço cadastral/padrão do cliente."""
+    if not novo_endereco or not novo_endereco.strip():
+        return False
+    conn = get_db_connection()
+    cursor = conn.cursor()
+    cursor.execute(
+        "UPDATE clientes SET endereco_padrao = ? WHERE id = ?;",
+        (novo_endereco.strip(), cliente_id)
+    )
+    conn.commit()
+    alterado = cursor.rowcount > 0
+    conn.close()
+    return alterado
+
+
 # =====================================================================
 # OPERAÇÕES DE PEDIDOS E ITENS (CHECKOUT E ACOMPANHAMENTO)
 # =====================================================================

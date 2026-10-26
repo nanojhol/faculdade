@@ -37,10 +37,12 @@
         <span class="price-value">R$ {{ "%.2f"|format(p.preco)|replace('.', ',') }}</span>
         <span class="stock-tag">Em estoque</span>
       </div>
-      <form action="{{ url_for('routes.adicionar_carrinho') }}" method="POST" class="action-group">
+      <form action="{{ url_for('routes.adicionar_carrinho') }}" method="POST" class="action-group form-add-carrinho" data-nome="{{ p.nome }}">
         <input type="hidden" name="produto_id" value="{{ p.id }}">
         <input type="number" name="quantidade" class="input-qtd" min="1" step="1" value="1" required>
-        <button type="submit" class="btn btn-mel" style="flex: 1;">Adicionar</button>
+        <button type="submit" class="btn btn-mel btn-add-carrinho" style="flex: 1;">
+          <span class="btn-text">Adicionar</span>
+        </button>
       </form>
     </div>
   </div>

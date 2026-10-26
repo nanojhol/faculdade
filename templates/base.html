@@ -36,21 +36,28 @@
         <a href="{{ url_for('routes.operador') }}" class="{% if request.endpoint == 'routes.operador' %}active{% endif %}">Área da Loja</a>
 
         {% if session.get('cliente_nome') %}
-          <!-- Perfil do Usuário Logado em Destaque na Parte Superior -->
+          <!-- Perfil do Usuário Logado em Destaque na Parte Superior (Compacto e Alinhado) -->
           <div class="user-chip">
-            <span class="user-avatar-circle">👤</span>
-            <span class="user-name-text">Olá, <strong>{{ session.get('cliente_nome') }}</strong></span>
-            <a href="{{ url_for('routes.conta') }}" class="btn-chip-action" title="Visualizar meu perfil">Meu Perfil</a>
+            <a href="{{ url_for('routes.conta') }}" class="user-chip-link" title="Visualizar Meu Perfil">
+              <span class="user-avatar-circle">👤</span>
+              <span class="user-name-text">Olá, <strong>{{ session.get('cliente_nome') }}</strong></span>
+            </a>
+            <span class="user-chip-sep">|</span>
+            <a href="{{ url_for('routes.conta') }}" class="btn-chip-action" title="Meu Perfil">Perfil</a>
+            <span class="user-chip-sep">|</span>
             <a href="{{ url_for('routes.logout') }}" class="btn-chip-action btn-chip-logout" title="Encerrar sessão">Sair</a>
           </div>
         {% else %}
-          <a href="{{ url_for('routes.conta') }}" class="{% if request.endpoint == 'routes.conta' %}active{% endif %}" style="background: rgba(214, 132, 36, 0.15); border: 1px solid var(--mel); color: var(--chocolate); padding: 7px 16px;">
+          <a href="{{ url_for('routes.conta') }}" class="{% if request.endpoint == 'routes.conta' %}active{% endif %} btn-entrar-nav">
             👤 Entrar / Cadastrar
           </a>
         {% endif %}
       </nav>
     </div>
   </header>
+
+  <!-- Container de Notificações Toast Flutuantes -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
 
   <main>
     <!-- Mensagens Flash de Feedback -->

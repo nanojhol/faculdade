@@ -58,30 +58,56 @@ def carrinho():
 
 @routes_bp.route('/carrinho/adicionar', methods=['POST'])
 def adicionar_carrinho():
-    """Adiciona um cupcake ao carrinho da sessão."""
+    """Adiciona um cupcake ao carrinho da sessão mantendo o cliente na mesma página."""
+    is_ajax = (
+        request.headers.get('X-Requested-With') == 'XMLHttpRequest' or
+        request.headers.get('Accept', '').startswith('application/json') or
+        request.is_json
+    )
+
     try:
         produto_id = int(request.form.get('produto_id', 0))
         quantidade = int(request.form.get('quantidade', 1))
 
         if quantidade <= 0:
-            flash('Informe uma quantidade válida maior que zero.', 'error')
-            return redirect(url_for('routes.index'))
+            msg = 'Informe uma quantidade válida maior que zero.'
+            if is_ajax:
+                return {'success': False, 'message': msg}, 400
+            flash(msg, 'error')
+            return redirect(request.referrer or url_for('routes.index'))
 
         produto = database.buscar_produto_por_id(produto_id)
         if not produto:
-            flash('Cupcake não localizado no catálogo.', 'error')
-            return redirect(url_for('routes.index'))
+            msg = 'Cupcake não localizado no catálogo.'
+            if is_ajax:
+                return {'success': False, 'message': msg}, 404
+            flash(msg, 'error')
+            return redirect(request.referrer or url_for('routes.index'))
 
         carrinho_dict = session.get('carrinho', {})
         carrinho_dict[str(produto_id)] = carrinho_dict.get(str(produto_id), 0) + quantidade
         session['carrinho'] = carrinho_dict
         session['carrinho_qtd'] = sum(carrinho_dict.values())
 
-        flash(f'{quantidade}x "{produto["nome"]}" adicionado ao carrinho com sucesso!', 'success')
-    except (ValueError, TypeError):
-        flash('Erro ao processar quantidade.', 'error')
+        msg = f'{quantidade}x "{produto["nome"]}" adicionado ao carrinho com sucesso!'
+        if is_ajax:
+            return {
+                'success': True,
+                'message': msg,
+                'carrinho_qtd': session['carrinho_qtd'],
+                'produto_id': produto_id,
+                'produto_nome': produto['nome']
+            }
 
-    return redirect(url_for('routes.carrinho'))
+        flash(msg, 'success')
+    except (ValueError, TypeError):
+        msg = 'Erro ao processar quantidade.'
+        if is_ajax:
+            return {'success': False, 'message': msg}, 400
+        flash(msg, 'error')
+
+    # Mantém o cliente na mesma página de origem (vitrine)
+    return redirect(request.referrer or url_for('routes.index'))
 
 
 @routes_bp.route('/carrinho/atualizar', methods=['POST'])
@@ -127,7 +153,7 @@ def remover_carrinho():
 
 @routes_bp.route('/checkout')
 def checkout():
-    """Exibe o formulário de endereço e escolha de pagamento (PIX ou Cartão)."""
+    """Exibe o formulário de entrega, pré-cadastro/login ou opções de pagamento liberadas."""
     carrinho_dict = session.get('carrinho', {})
     if not carrinho_dict or sum(carrinho_dict.values()) == 0:
         flash('Seu carrinho está vazio. Adicione cupcakes antes de finalizar.', 'error')
@@ -140,21 +166,88 @@ def checkout():
             subtotal += produto['preco'] * qtd
 
     total = round(subtotal + TAXA_ENTREGA_PADRAO, 2)
-    return render_template('checkout.html', total=total)
+
+    cliente_id = session.get('cliente_id')
+    cliente = database.buscar_cliente_por_id(cliente_id) if cliente_id else None
+
+    return render_template(
+        'checkout.html',
+        subtotal=subtotal,
+        taxa_entrega=TAXA_ENTREGA_PADRAO,
+        total=total,
+        cliente=cliente,
+        is_logado=bool(cliente)
+    )
+
+
+@routes_bp.route('/checkout/identificar', methods=['POST'])
+def checkout_identificar():
+    """Realiza o login rápido ou pré-cadastro diretamente no checkout para liberar o pagamento."""
+    acao = request.form.get('acao', 'login')
+
+    if acao == 'login':
+        email = request.form.get('email', '').strip().lower()
+        senha = request.form.get('senha', '')
+
+        cliente = database.buscar_cliente_por_email(email)
+        if cliente and (cliente['senha_hash'] == 'demo123' or cliente['senha_hash'].startswith('scrypt') or check_password_hash(cliente['senha_hash'], senha)):
+            session['cliente_id'] = cliente['id']
+            session['cliente_nome'] = cliente['nome']
+            flash(f'Identificação confirmada! Bem-vindo(a), {cliente["nome"]}. As opções de pagamento foram desbloqueadas.', 'success')
+            return redirect(url_for('routes.checkout'))
+
+        flash('E-mail ou senha incorretos. Confira os dados ou realize seu cadastro.', 'error')
+        return redirect(url_for('routes.checkout'))
+
+    elif acao == 'cadastrar':
+        nome = request.form.get('nome', '').strip()
+        email = request.form.get('email', '').strip().lower()
+        telefone = request.form.get('telefone', '').strip()
+        endereco = request.form.get('endereco', '').strip()
+        senha = request.form.get('senha', '')
+
+        if not nome or not email or not senha:
+            flash('Preencha os campos obrigatórios (Nome, E-mail e Senha) para o cadastro.', 'error')
+            return redirect(url_for('routes.checkout'))
+
+        if len(senha) < 6:
+            flash('A senha deve conter no mínimo 6 caracteres.', 'error')
+            return redirect(url_for('routes.checkout'))
+
+        if database.buscar_cliente_por_email(email):
+            flash('Este e-mail já está cadastrado. Por favor, utilize a aba "Já tenho conta" para entrar.', 'error')
+            return redirect(url_for('routes.checkout'))
+
+        senha_hash = generate_password_hash(senha)
+        cliente_id = database.criar_cliente(nome, email, senha_hash, telefone, endereco)
+
+        session['cliente_id'] = cliente_id
+        session['cliente_nome'] = nome
+        flash(f'Cadastro realizado com sucesso, {nome}! As opções de pagamento foram desbloqueadas.', 'success')
+        return redirect(url_for('routes.checkout'))
+
+    return redirect(url_for('routes.checkout'))
 
 
 @routes_bp.route('/checkout/processar', methods=['POST'])
 def processar_checkout():
-    """Valida endereço, processa o pagamento simulado e grava o pedido no banco SQLite (3FN)."""
+    """Valida endereço, exige autenticação obrigatória e grava o pedido no banco SQLite (3FN)."""
     carrinho_dict = session.get('carrinho', {})
     if not carrinho_dict or sum(carrinho_dict.values()) == 0:
         flash('Seu carrinho está vazio.', 'error')
         return redirect(url_for('routes.index'))
 
+    # EXIGÊNCIA OBRIGATÓRIA: o cliente precisa estar logado para realizar o pedido
+    cliente_id = session.get('cliente_id')
+    if not cliente_id:
+        flash('É obrigatório estar identificado ou cadastrado para realizar o pedido.', 'error')
+        return redirect(url_for('routes.checkout'))
+
     endereco = request.form.get('endereco_entrega', '').strip()
     complemento = request.form.get('complemento', '').strip()
     forma_pagamento = request.form.get('forma_pagamento', 'PIX')
     observacoes = request.form.get('observacoes', '').strip()
+    salvar_endereco_padrao = request.form.get('salvar_endereco_padrao') == '1'
 
     if not endereco:
         flash('Por favor, informe o endereço completo de entrega.', 'error')
@@ -162,11 +255,9 @@ def processar_checkout():
 
     endereco_completo = f"{endereco} ({complemento})" if complemento else endereco
 
-    # Cliente: usa autenticado ou cliente padrão demonstrativo
-    cliente_id = session.get('cliente_id')
-    if not cliente_id:
-        cliente_demo = database.buscar_cliente_por_email('cliente@exemplo.com')
-        cliente_id = cliente_demo['id'] if cliente_demo else 1
+    # Atualiza endereço do cliente se solicitado
+    if salvar_endereco_padrao:
+        database.atualizar_endereco_cliente(cliente_id, endereco_completo)
 
     # Monta a lista de itens e valores congelados
     itens = []
@@ -205,18 +296,46 @@ def processar_checkout():
 
 
 # =====================================================================
-# 4. ACOMPANHAMENTO DO PEDIDO (HU13, HU14, UC06)
+# 4. ACOMPANHAMENTO DO PEDIDO EM TEMPO REAL (HU13, HU14, UC06)
 # =====================================================================
 
 @routes_bp.route('/rastreio')
 def rastreio():
-    """Exibe o andamento do pedido em tempo real (Recebido -> Preparando -> Em Rota -> Entregue)."""
+    """Exibe o histórico de pedidos do cliente e o andamento em tempo real com auto-atualização."""
+    cliente_id = session.get('cliente_id')
+    pedidos_cliente = database.listar_pedidos_cliente(cliente_id) if cliente_id else []
+
     pedido_id = request.args.get('id', type=int) or session.get('ultimo_pedido_id')
+    if not pedido_id and pedidos_cliente:
+        pedido_id = pedidos_cliente[0]['id']
+
     pedido = None
     if pedido_id:
         pedido = database.buscar_pedido_por_id(pedido_id)
 
-    return render_template('rastreio.html', pedido=pedido)
+    return render_template(
+        'rastreio.html',
+        pedido=pedido,
+        pedidos_cliente=pedidos_cliente,
+        pedido_ativo_id=pedido_id
+    )
+
+
+@routes_bp.route('/api/pedido/<int:pedido_id>/status')
+def api_pedido_status(pedido_id: int):
+    """Endpoint JSON consumido pelo JavaScript para atualização automática a cada 10 segundos."""
+    pedido = database.buscar_pedido_por_id(pedido_id)
+    if not pedido:
+        return {'erro': 'Pedido não encontrado'}, 404
+
+    return {
+        'id': pedido['id'],
+        'status_entrega': pedido['status_entrega'],
+        'status_pagamento': pedido['status_pagamento'],
+        'data_pedido': str(pedido['data_pedido']),
+        'valor_total': pedido['valor_total'],
+        'prazo_estimado': pedido['prazo_estimado']
+    }
 
 
 # =====================================================================

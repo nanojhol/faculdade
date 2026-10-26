@@ -1,29 +1,70 @@
 {% extends "base.html" %}
 
-{% block title %}Painel Operacional da Loja — Sweet Cupcake Gourmet{% endblock %}
+{% block title %}Painel de Gestão da Loja — Sweet Cupcake Gourmet{% endblock %}
 
 {% block content %}
 <div class="section-title">
   <h2>Painel de Gestão da Loja</h2>
-  <p>Módulo operacional restrito para consulta dos pedidos e avanço de status de entrega (HU15 / UC06).</p>
+  <p>Módulo operacional para acompanhamento do histórico completo de pedidos de todos os clientes e controle de entrega.</p>
 </div>
 
+<!-- Métricas Operacionais Rápidas -->
+{% if pedidos %}
+  {% set total_pedidos = pedidos|length %}
+  {% set recebidos = pedidos|selectattr('status_entrega', 'equalto', 'RECEBIDO')|list|length %}
+  {% set preparando = pedidos|selectattr('status_entrega', 'equalto', 'PREPARANDO')|list|length %}
+  {% set em_rota = pedidos|selectattr('status_entrega', 'equalto', 'EM_ROTA')|list|length %}
+  {% set entregues = pedidos|selectattr('status_entrega', 'equalto', 'ENTREGUE')|list|length %}
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 14px; margin-bottom: 24px;">
+    <div style="background: var(--bg-surface); padding: 14px; border-radius: var(--radius-sm); border: 1px solid var(--borda); text-align: center;">
+      <p style="font-size: 11px; text-transform: uppercase; color: var(--marrom-medio); font-weight: 700;">Total de Pedidos</p>
+      <h3 style="font-size: 24px; color: var(--chocolate); margin-top: 4px;">{{ total_pedidos }}</h3>
+    </div>
+    <div style="background: #e3f2fd; padding: 14px; border-radius: var(--radius-sm); border: 1px solid #bbdefb; text-align: center;">
+      <p style="font-size: 11px; text-transform: uppercase; color: #1565c0; font-weight: 700;">Recebidos</p>
+      <h3 style="font-size: 24px; color: #0d47a1; margin-top: 4px;">{{ recebidos }}</h3>
+    </div>
+    <div style="background: #fff3e0; padding: 14px; border-radius: var(--radius-sm); border: 1px solid #ffe0b2; text-align: center;">
+      <p style="font-size: 11px; text-transform: uppercase; color: #e65100; font-weight: 700;">Na Cozinha</p>
+      <h3 style="font-size: 24px; color: #bf360c; margin-top: 4px;">{{ preparando }}</h3>
+    </div>
+    <div style="background: #f3e5f5; padding: 14px; border-radius: var(--radius-sm); border: 1px solid #e1bee7; text-align: center;">
+      <p style="font-size: 11px; text-transform: uppercase; color: #7b1fa2; font-weight: 700;">Em Rota</p>
+      <h3 style="font-size: 24px; color: #4a148c; margin-top: 4px;">{{ em_rota }}</h3>
+    </div>
+    <div style="background: #e8f5e9; padding: 14px; border-radius: var(--radius-sm); border: 1px solid #c8e6c9; text-align: center;">
+      <p style="font-size: 11px; text-transform: uppercase; color: #2e7d32; font-weight: 700;">Entregues</p>
+      <h3 style="font-size: 24px; color: #1b5e20; margin-top: 4px;">{{ entregues }}</h3>
+    </div>
+  </div>
+{% endif %}
+
 <div class="card-cupcake" style="box-shadow: var(--sombra-card);">
-  <h3>Fila de Pedidos Realizados</h3>
-  <p class="card-desc">Visualize e altere o status de entrega conforme o fluxo da cozinha e expedição.</p>
+  <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px; margin-bottom: 12px;">
+    <div>
+      <h3 style="margin-bottom: 2px;">Histórico Geral de Pedidos</h3>
+      <p class="card-desc">Controle de expedição: atualize o status para refletir em tempo real no acompanhamento do cliente.</p>
+    </div>
+    <span class="stock-tag" style="background: rgba(214, 132, 36, 0.15); color: var(--chocolate);">
+      Exclusivo da Loja
+    </span>
+  </div>
 
   {% if not pedidos %}
     <div class="alert-box alert-info">
       Nenhum pedido foi realizado ainda no sistema.
     </div>
   {% else %}
-    <div class="table-container" style="margin-top: 16px;">
+    <div class="table-container" style="margin-top: 14px;">
       <table>
         <thead>
           <tr>
             <th># Pedido</th>
-            <th>Cliente</th>
+            <th>Data/Hora</th>
+            <th>Cliente & Destino</th>
             <th>Itens Comprados</th>
+            <th>Pagamento</th>
             <th>Total</th>
             <th>Status Atual</th>
             <th>Avançar Etapa</th>
@@ -32,34 +73,49 @@
         <tbody>
           {% for p in pedidos %}
           <tr>
-            <td><strong>#{{ p.id }}</strong></td>
             <td>
-              {{ p.cliente_nome }}<br>
-              <small style="color: var(--marrom-medio);">{{ p.endereco_entrega }}</small>
+              <strong style="font-size: 14px; color: var(--chocolate);">#{{ p.id }}</strong>
             </td>
-            <td>{{ p.resumo_itens }}</td>
-            <td><strong>R$ {{ "%.2f"|format(p.valor_total)|replace('.', ',') }}</strong></td>
+            <td style="font-size: 12px; color: var(--marrom-medio); white-space: nowrap;">
+              {{ p.data_pedido }}
+            </td>
+            <td>
+              <strong>{{ p.cliente_nome }}</strong><br>
+              <span style="font-size: 11px; color: var(--marrom-medio);">📞 {{ p.cliente_telefone or 'Não informado' }}</span><br>
+              <small style="color: var(--chocolate);">📍 {{ p.endereco_entrega }}</small>
+            </td>
+            <td style="font-size: 13px;">
+              {{ p.resumo_itens }}
+            </td>
+            <td>
+              <span style="font-size: 12px; font-weight: 600;">{{ p.forma_pagamento }}</span><br>
+              <span class="stock-tag" style="background:#e8f5e9; color:#2e7d32; font-size:10px; padding: 2px 6px;">{{ p.status_pagamento }}</span>
+            </td>
+            <td style="white-space: nowrap;">
+              <strong style="color: var(--chocolate); font-size: 14px;">R$ {{ "%.2f"|format(p.valor_total)|replace('.', ',') }}</strong><br>
+              <small style="font-size: 10px; color: var(--marrom-medio);">(c/ taxa R$ 6)</small>
+            </td>
             <td>
               {% if p.status_entrega == 'RECEBIDO' %}
-                <span class="stock-tag" style="background:#e3f2fd; color:#1565c0;">Recebido</span>
+                <span class="stock-tag" style="background:#e3f2fd; color:#1565c0; font-size: 11px;">Recebido</span>
               {% elif p.status_entrega == 'PREPARANDO' %}
-                <span class="stock-tag" style="background:#fff3e0; color:#e65100;">Preparando</span>
+                <span class="stock-tag" style="background:#fff3e0; color:#e65100; font-size: 11px;">Preparando</span>
               {% elif p.status_entrega == 'EM_ROTA' %}
-                <span class="stock-tag" style="background:#f3e5f5; color:#7b1fa2;">Em Rota</span>
+                <span class="stock-tag" style="background:#f3e5f5; color:#7b1fa2; font-size: 11px;">Em Rota</span>
               {% else %}
-                <span class="stock-tag" style="background:#e8f5e9; color:#2e7d32;">Entregue</span>
+                <span class="stock-tag" style="background:#e8f5e9; color:#2e7d32; font-size: 11px;">Entregue</span>
               {% endif %}
             </td>
             <td>
-              <form action="{{ url_for('routes.mudar_status_pedido') }}" method="POST" style="display: flex; gap: 6px;">
+              <form action="{{ url_for('routes.mudar_status_pedido') }}" method="POST" style="display: flex; gap: 4px; align-items: center;">
                 <input type="hidden" name="pedido_id" value="{{ p.id }}">
-                <select name="novo_status" class="form-control" style="padding: 4px 8px; font-size: 12px; width: auto;">
+                <select name="novo_status" class="form-control" style="padding: 5px 8px; font-size: 12px; width: auto;">
                   <option value="RECEBIDO" {% if p.status_entrega == 'RECEBIDO' %}selected{% endif %}>Recebido</option>
                   <option value="PREPARANDO" {% if p.status_entrega == 'PREPARANDO' %}selected{% endif %}>Preparando</option>
                   <option value="EM_ROTA" {% if p.status_entrega == 'EM_ROTA' %}selected{% endif %}>Em Rota</option>
                   <option value="ENTREGUE" {% if p.status_entrega == 'ENTREGUE' %}selected{% endif %}>Entregue</option>
                 </select>
-                <button type="submit" class="btn btn-chocolate" style="font-size: 11px; padding: 4px 10px;">Atualizar</button>
+                <button type="submit" class="btn btn-chocolate" style="font-size: 11px; padding: 6px 10px;">Salvar</button>
               </form>
             </td>
           </tr>
