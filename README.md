@@ -49,13 +49,13 @@ Vou seguir as três situações propostas pela faculdade. Vou registrar aqui o q
 
 #### 2. Desenvolver a solução <a id="etapa-2"></a>
 
-- [x] Definir a linguagem do back-end (Python/Flask em MVC), o banco (SQLite), a plataforma (Web), a hospedagem (Vercel) e o modo tradicional de codificação.
+- [x] Definir a linguagem do back-end (Python/Flask em MVC), o banco (SQLite), a plataforma (Web), a hospedagem (Servidor Local / Localhost) e o modo tradicional de codificação.
 - [x] Desenvolver a estrutura MVC da aplicação em Python/Flask (`models/database.py`, `controllers/routes.py` e `templates/`).
 - [x] Desenvolver o front-end responsivo com tokens visuais de confeitaria editorial, fotos reais dos 5 cupcakes e perfil de usuário em destaque no cabeçalho quando logado.
 - [x] Integrar a interface, o processamento e o banco de dados SQLite (3FN) com persistência atômica de pedidos.
 - [x] Testar o front-end e o back-end e tratar os erros de forma amigável.
 - [x] Preparar o manual de uso e reunir as bibliotecas utilizadas (`requirements.txt`).
-- [x] Configurar o manifesto de hospedagem para a Vercel (`vercel.json`).
+- [x] Configurar o ambiente de execução local com manual passo a passo (`manual_de_uso.md`) e dependências (`requirements.txt`).
 - [x] Disponibilizar o repositório público no GitHub (https://github.com/nanojhol/faculdade).
 
 **Onde estou:** código-fonte MVC completamente funcional, testado e com manual de uso pronto.
@@ -130,7 +130,7 @@ A partir dos 5 ciclos de testes de usabilidade e engenharia, foram identificados
 | JavaScript | Demonstrar a dinâmica da vitrine, cálculo do carrinho e fluxo de pedidos | Permite simulação do comportamento interativo diretamente no navegador |
 | SQLite | SGBD relacional para armazenamento dos dados em 3FN | Leve, confiável, sem necessidade de servidor externo e de fácil manutenção |
 | Python / Flask | Linguagem e micro-framework para o back-end no padrão MVC | Sugerido no material da disciplina por sua clareza estrutural e rapidez |
-| Vercel | Plataforma de hospedagem para a aplicação Web | Hospedagem ágil e compatível com Serverless Functions em Python |
+| Servidor Local (Localhost) | Execução da aplicação Flask em ambiente de desenvolvimento | Permite testes completos, depuração ágil e persistência atômica com SQLite |
 | Python-docx | Geração automatizada do relatório acadêmico oficial no padrão do modelo | Garante formatação precisa de tabelas, fontes e estrutura solicitada pela faculdade |
 
 ### Registro das etapas <a id="registro"></a>

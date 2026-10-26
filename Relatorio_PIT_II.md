@@ -38,11 +38,11 @@
 |---|---|
 | **Linguagem do Back-end** | **Python (Framework Flask — Padrão Arquitetural MVC)** |
 | **Banco de Dados** | **SQLite (Normalizado na Terceira Forma Normal — 3FN)** |
-| **Hospedagem** | **Vercel (Deploy Web Serverless / Cloud)** |
+| **Hospedagem** | **Servidor Local / Localhost (Execução em ambiente de desenvolvimento Python/Flask com SQLite)** |
 | **Plataforma** | **Web Responsiva (Compatível com Desktop e Dispositivos Móveis)** |
 | **Modo de Codificação** | **( x ) Tradicional** &nbsp;&nbsp; ( ) Low-code &nbsp;&nbsp; ( ) No-code |
 | **Link do repositório no GitHub com os códigos abertos** | [https://github.com/nanojhol/faculdade](https://github.com/nanojhol/faculdade) |
-| **Link da solução em funcionamento** | [https://github.com/nanojhol/faculdade](https://github.com/nanojhol/faculdade) *(a ser complementado com o link da Vercel após a publicação final)* |
+| **Link da solução em funcionamento** | [https://github.com/nanojhol/faculdade](https://github.com/nanojhol/faculdade) *(Código aberto completo com manual de execução local e protótipo interativo)* |
 | **Link do vídeo narrado (no mínimo 5 min)** | [https://drive.google.com/file/d/12bklwOwWQj-rv4l9tdy3alV2JBYcRW6Z/view?usp=sharing](https://drive.google.com/file/d/12bklwOwWQj-rv4l9tdy3alV2JBYcRW6Z/view?usp=sharing) |
 
 ---

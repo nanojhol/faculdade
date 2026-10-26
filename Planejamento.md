@@ -46,7 +46,7 @@ Conforme os campos solicitados no modelo oficial de entrega da faculdade:
 | **Linguagem do Back-end** | **Python (Framework Flask)** | Indicada no material (p. 34). Flask é leve, aderente ao padrão arquitetural **MVC** (Model-View-Controller) e possui sintaxe limpa e de fácil manutenção. |
 | **Banco de Dados** | **SQLite** (`database.db`) | SGBD relacional serverless, de fácil portabilidade e manutenção, em conformidade com a 3FN. Não requer servidores externos pesados. |
 | **Front-end** | **HTML5, CSS3 e JavaScript (Vanilla)** | Tecnologias canônicas especificadas no enunciado do PIT II (pp. 33 e 38), garantindo acessibilidade, responsividade e rapidez. |
-| **Hospedagem** | **Vercel** (com fallback no Netlify / Render) | Suporte nativo a Serverless Functions em Python, deploy ágil e gratuito para a demonstração pública exigida no PIT II. |
+| **Hospedagem** | **Servidor Local / Localhost** | Ambiente ágil de desenvolvimento e testes locais com Python/Flask e banco relacional SQLite. |
 | **Plataforma** | **Web (Navegadores modernos / Mobile-friendly)** | Acesso multiplataforma direto pelo navegador sem necessidade de instalação de aplicativos externos. |
 | **Modo de Codificação** | **Tradicional** | Desenvolvimento de código-fonte aberto, estruturado em MVC com rotas, templates e modelos de dados. |
 
@@ -122,4 +122,4 @@ O ciclo de planejamento, modelagem, desenvolvimento e avaliação de usabilidade
 3. **Protótipo interativo e aplicação MVC:** Protótipo navegável (`Prototipo.html`) e sistema completo em Python/Flask (`models/database.py`, `controllers/routes.py`, `templates/`, `static/`) com fotos reais e perfil nominal na barra superior (Concluído).
 4. **Testes de usabilidade e laudo de qualidade:** Cinco testes com participantes externos realizados, sugestões incorporadas e laudo de qualidade formalizado (Concluído).
 5. **Relatório acadêmico oficial:** Documento nos formatos DOCX (`Relatorio_PIT_II_Jonatas_Alves_Rodrigues.docx`) e Markdown (`Relatorio_PIT_II.md`) integralmente preenchido conforme o modelo institucional da faculdade (Concluído).
-6. **Deploy e entrega:** Preparação de arquivos para deploy na Vercel (`vercel.json`, `requirements.txt`) e submissão dos arquivos e repositório Git ao final da conferência.
+6. **Empacotamento e entrega:** Preparação das dependências (`requirements.txt`), manual de uso local e submissão dos arquivos e repositório Git ao final da conferência.
