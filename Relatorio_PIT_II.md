@@ -1,13 +1,13 @@
 # Relatório de Entrega — Projeto Integrador Transdisciplinar em Engenharia de Software II
 
-> Modelo Oficial de Entrega do PIT II preenchido conforme as solicitações da disciplina e do AVA. Documento disponível em formato Word em [`Relatorio_PIT_II_Jonatas_Alves_Rodrigues.docx`](Relatorio_PIT_II_Jonatas_Alves_Rodrigues.docx).
+> Modelo Oficial de Entrega do PIT II preenchido conforme as solicitações da disciplina e do AVA. Documento oficial em formato Word preparado para submissão direta no AVA.
 
 ---
 
 ## 1. Identificação do Estudante
 
 - **Nome:** Jonatas Alves Rodrigues
-- **RGM:** 34733272
+- **RGM:** [Disponibilizado no relatório oficial enviado ao AVA]
 - **Curso:** Engenharia de Software
 - **Semestre:** 8º Semestre (Segundo Semestre de 2026)
 - **Disciplina:** Projeto Integrador Transdisciplinar em Engenharia de Software II (Turma_001)

@@ -7,6 +7,10 @@ __pycache__/
 env/
 venv/
 
+# Relatório Acadêmico Oficial com Identificação (para submissão direta no AVA)
+Relatorio_PIT_II_Jonatas_Alves_Rodrigues.docx
+*.docx
+
 # Temporários do Word e Sistema
 ~$*.docx
 desktop.ini

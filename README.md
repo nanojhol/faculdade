@@ -11,8 +11,7 @@ A ideia é que o cliente consiga ver os cupcakes, montar o pedido, fazer o pagam
 | Abrir | Conteúdo |
 |---|---|
 | [Arquivos do projeto](./) | Pasta principal da atividade |
-| [Relatório Oficial (DOCX)](Relatorio_PIT_II_Jonatas_Alves_Rodrigues.docx) | Documento oficial preenchido para entrega da atividade acadêmica |
-| [Relatório Oficial (Markdown)](Relatorio_PIT_II.md) | Versão em Markdown com respostas completas e laudo de qualidade |
+| [Relatório Oficial](Relatorio_PIT_II.md) | Versão completa do relatório com respostas, tabelas e laudo de qualidade |
 | [Aplicação Flask](app.py) | Ponto de entrada do sistema no padrão arquitetural MVC |
 | [Manual de uso](manual_de_uso.md) | Instruções passo a passo de instalação, configuração e uso |
 | [Planejamento](Planejamento.md) | Escopo, 5 sabores oficiais, histórias de usuário, backlog e casos de uso |
@@ -67,7 +66,7 @@ Vou seguir as três situações propostas pela faculdade. Vou registrar aqui o q
 - [x] Registrar os nomes, o que funcionou, as falhas, as sugestões e o que não foi testado.
 - [x] Fazer as correções pertinentes, testar as alterações e atualizar a documentação.
 - [x] Preparar o laudo de qualidade com os erros, as correções e as evidências.
-- [x] Preencher o modelo oficial em formato DOCX e Markdown (`Relatorio_PIT_II_Jonatas_Alves_Rodrigues.docx` e `Relatorio_PIT_II.md`).
+- [x] Preencher o modelo oficial de entrega da faculdade (`Relatorio_PIT_II.md` e arquivo DOCX institucional para submissão no AVA).
 - [ ] Conferir as instruções de envio no AVA, entregar e guardar o comprovante.
 
 **Ainda falta fazer:** conferência final e submissão da atividade no AVA.
@@ -97,7 +96,7 @@ Vou seguir as três situações propostas pela faculdade. Vou registrar aqui o q
 | Revisão do texto | Revisei o README, o planejamento e os textos das telas para deixar a leitura mais simples. Mantive as pendências e o escopo da atividade | Markdown, textos do HTML e rótulos do Draw.io para organizar a apresentação | Definir os produtos, as regras de negócio e a modelagem de dados |
 | Definição comercial e banco de dados | Defini os 5 sabores de cupcakes, descrições, preços, taxa fixa de R$ 6,00 e prazo de 15 a 30 min. Elaborei os modelos conceitual e lógico (3FN), executei o script físico em SQLite e criei o dicionário de dados. Atualizei o protótipo com os 5 sabores e cálculo real | SQLite, SQL (schema.sql), Markdown e HTML/CSS/JS para viabilizar a estrutura de dados e regras antes da codificação | Iniciar a estrutura da aplicação MVC em Python/Flask |
 | Desenvolvimento MVC e aprimoramento visual | Implementei a aplicação completa em padrão MVC (`models/database.py`, `controllers/routes.py`, `templates/`, `static/`), integrei fotos reais nos cards dos 5 cupcakes, destaquei o perfil do usuário logado na barra superior, criei a tela de perfil de cliente e elaborei o manual de uso | Python, Flask, Jinja2, SQLite, CSS com direção de arte editorial de confeitaria e Markdown | Preparar deploy e testes da solução |
-| Relatório oficial e laudo de testes | Elaborei o relatório completo de entrega nos formatos DOCX e Markdown (`Relatorio_PIT_II_Jonatas_Alves_Rodrigues.docx` e `Relatorio_PIT_II.md`), contendo a identificação do estudante (Jonatas Alves Rodrigues, RGM 34733272), as tabelas de codificação, os 5 testes de usabilidade com participantes, o laudo de qualidade com correções comprovadas e o manual de execução | Python-docx, Markdown e Microsoft Word para formatação rigorosa no modelo institucional | Validação final de entrega e submissão no AVA |
+| Relatório oficial e laudo de testes | Elaborei o relatório completo de entrega da atividade contendo as tabelas de codificação, os 5 testes de usabilidade com participantes, o laudo de qualidade com correções comprovadas e o manual de execução | Python-docx, Markdown e Microsoft Word para formatação rigorosa no modelo institucional | Validação final de entrega e submissão no AVA |
 
 A cada etapa, vou anotar o que fiz, quais arquivos mexi, a ferramenta que usei e o motivo. Se precisar corrigir alguma coisa, vou registrar a mudança sem apagar o que fiz antes.
 
