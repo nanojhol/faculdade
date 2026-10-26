@@ -301,17 +301,36 @@ def processar_checkout():
 
 @routes_bp.route('/rastreio')
 def rastreio():
-    """Exibe o histórico de pedidos do cliente e o andamento em tempo real com auto-atualização."""
+    """
+    Exibe o acompanhamento de pedidos em tempo real.
+    - Se o usuário não estiver logado, redireciona para a página de login/cadastro.
+    - Se houver pedido em andamento (status != 'ENTREGUE'), sempre exibe o pedido ativo.
+    - Se não houver pedidos em andamento, exibe o campo para pesquisar/consultar pedidos.
+    """
     cliente_id = session.get('cliente_id')
-    pedidos_cliente = database.listar_pedidos_cliente(cliente_id) if cliente_id else []
+    if not cliente_id:
+        flash("Por favor, acesse sua conta para acompanhar seus pedidos em tempo real.", "aviso")
+        return redirect(url_for('routes.conta', next='rastreio'))
 
-    pedido_id = request.args.get('id', type=int) or session.get('ultimo_pedido_id')
+    pedidos_cliente = database.listar_pedidos_cliente(cliente_id)
+
+    pedido_id = request.args.get('id', type=int)
+
+    # Se nenhum ID foi especificado, procura automaticamente pedido em andamento (não finalizado)
     if not pedido_id and pedidos_cliente:
-        pedido_id = pedidos_cliente[0]['id']
+        for p in pedidos_cliente:
+            if p['status_entrega'] != 'ENTREGUE':
+                pedido_id = p['id']
+                break
 
     pedido = None
     if pedido_id:
         pedido = database.buscar_pedido_por_id(pedido_id)
+        # Garante que o pedido pertence ao cliente autenticado
+        if pedido and pedido['cliente_id'] != cliente_id:
+            flash("Pedido não encontrado ou não pertence à sua conta.", "aviso")
+            pedido = None
+            pedido_id = None
 
     return render_template(
         'rastreio.html',
@@ -323,10 +342,29 @@ def rastreio():
 
 @routes_bp.route('/api/pedido/<int:pedido_id>/status')
 def api_pedido_status(pedido_id: int):
-    """Endpoint JSON consumido pelo JavaScript para atualização automática a cada 10 segundos."""
+    """
+    Endpoint JSON consumido pelo JavaScript para atualização automática a cada 10 segundos.
+    Avança automaticamente o status do pedido a cada ciclo de 10s:
+    RECEBIDO -> PREPARANDO -> EM_ROTA -> ENTREGUE.
+    """
+    cliente_id = session.get('cliente_id')
+    if not cliente_id:
+        return {'erro': 'Não autenticado'}, 401
+
     pedido = database.buscar_pedido_por_id(pedido_id)
-    if not pedido:
+    if not pedido or pedido['cliente_id'] != cliente_id:
         return {'erro': 'Pedido não encontrado'}, 404
+
+    # Fluxo sequencial de status
+    fluxo = ['RECEBIDO', 'PREPARANDO', 'EM_ROTA', 'ENTREGUE']
+    status_atual = pedido['status_entrega']
+
+    # Se o pedido ainda está em andamento, avança para a próxima etapa a cada ciclo de 10s
+    if status_atual in fluxo and status_atual != 'ENTREGUE':
+        idx = fluxo.index(status_atual)
+        novo_status = fluxo[idx + 1]
+        database.atualizar_status_entrega(pedido_id, novo_status)
+        pedido = database.buscar_pedido_por_id(pedido_id)
 
     return {
         'id': pedido['id'],
@@ -360,16 +398,19 @@ def login():
     """Autentica o cliente e inicia sessão."""
     email = request.form.get('email', '').strip().lower()
     senha = request.form.get('senha', '')
+    next_page = request.form.get('next') or request.args.get('next')
 
     cliente = database.buscar_cliente_por_email(email)
     if cliente and (cliente['senha_hash'] == 'demo123' or cliente['senha_hash'].startswith('scrypt') or check_password_hash(cliente['senha_hash'], senha)):
         session['cliente_id'] = cliente['id']
         session['cliente_nome'] = cliente['nome']
         flash(f'Bem-vindo de volta, {cliente["nome"]}!', 'success')
+        if next_page == 'rastreio':
+            return redirect(url_for('routes.rastreio'))
         return redirect(url_for('routes.index'))
 
     flash('E-mail ou senha incorretos. Confira os dados e tente novamente.', 'error')
-    return redirect(url_for('routes.conta'))
+    return redirect(url_for('routes.conta', next=next_page if next_page else ''))
 
 
 @routes_bp.route('/conta/cadastrar', methods=['POST'])
@@ -380,18 +421,19 @@ def cadastrar():
     telefone = request.form.get('telefone', '').strip()
     endereco = request.form.get('endereco', '').strip()
     senha = request.form.get('senha', '')
+    next_page = request.form.get('next') or request.args.get('next')
 
     if not nome or not email or not senha:
         flash('Preencha todos os campos obrigatórios.', 'error')
-        return redirect(url_for('routes.conta'))
+        return redirect(url_for('routes.conta', next=next_page if next_page else ''))
 
     if len(senha) < 6:
         flash('A senha deve ter pelo menos 6 caracteres.', 'error')
-        return redirect(url_for('routes.conta'))
+        return redirect(url_for('routes.conta', next=next_page if next_page else ''))
 
     if database.buscar_cliente_por_email(email):
         flash('Este e-mail já está cadastrado. Faça login.', 'error')
-        return redirect(url_for('routes.conta'))
+        return redirect(url_for('routes.conta', next=next_page if next_page else ''))
 
     senha_hash = generate_password_hash(senha)
     cliente_id = database.criar_cliente(nome, email, senha_hash, telefone, endereco)
@@ -399,6 +441,8 @@ def cadastrar():
     session['cliente_id'] = cliente_id
     session['cliente_nome'] = nome
     flash('Cadastro realizado com sucesso! Você já pode realizar pedidos.', 'success')
+    if next_page == 'rastreio':
+        return redirect(url_for('routes.rastreio'))
     return redirect(url_for('routes.index'))
 
 

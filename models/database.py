@@ -292,3 +292,6 @@ def atualizar_status_entrega(pedido_id: int, novo_status: str) -> bool:
     alterado = cursor.rowcount > 0
     conn.close()
     return alterado
+
+# Alias para compatibilidade
+atualizar_status_pedido = atualizar_status_entrega

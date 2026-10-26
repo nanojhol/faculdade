@@ -6,9 +6,11 @@
 <div class="section-title" style="text-align: center;">
   <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 8px;">
     <h2>Acompanhamento em Tempo Real</h2>
-    <span class="pulse-indicator" title="O sistema sincroniza o status em segundo plano">
-      <span class="pulse-dot"></span> Ao vivo (10s)
-    </span>
+    {% if pedido %}
+      <span class="pulse-indicator" id="pulse-badge-live" {% if pedido.status_entrega == 'ENTREGUE' %}style="display: none;"{% endif %} title="O sistema sincroniza o status em tempo real">
+        <span class="pulse-dot"></span> Ao vivo (10s)
+      </span>
+    {% endif %}
   </div>
   <p>Consulte a situação do preparo e da entrega do seu pedido gourmet.</p>
 </div>
@@ -46,6 +48,15 @@
             </div>
           </a>
         {% endfor %}
+        <form action="{{ url_for('routes.rastreio') }}" method="GET" style="margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--borda);">
+          <label style="font-size: 11.5px; font-weight: 600; color: var(--chocolate); display: block; margin-bottom: 4px;">
+            🔍 Consultar outro pedido por nº:
+          </label>
+          <div style="display: flex; gap: 6px;">
+            <input type="number" name="id" class="form-control" placeholder="Nº Pedido" style="padding: 6px 10px; font-size: 12px;" required>
+            <button type="submit" class="btn btn-chocolate" style="padding: 6px 12px; font-size: 12px;">Buscar</button>
+          </div>
+        </form>
       {% else %}
         <div style="font-size: 13px; color: var(--marrom-medio); padding: 10px 0;">
           Você ainda não realizou pedidos com esta conta.
@@ -70,13 +81,26 @@
   <!-- COLUNA PRINCIPAL: TIMELINE DO PEDIDO SELECIONADO -->
   <main style="max-width: 100%; margin: 0; padding: 0;">
     {% if not pedido %}
-      <div class="card-cupcake" style="box-shadow: var(--sombra-card); text-align: center; padding: 40px 20px;">
-        <span style="font-size: 40px;">🔍</span>
-        <h3 style="margin: 12px 0 6px;">Nenhum pedido selecionado</h3>
-        <p class="card-desc" style="max-width: 440px; margin: 0 auto 20px;">
-          Selecione um pedido no histórico ao lado ou consulte um novo número para visualizar a linha do tempo em tempo real.
+      <div class="card-cupcake" style="box-shadow: var(--sombra-card); text-align: center; padding: 48px 24px; border-top: 4px solid var(--borda);">
+        <span style="font-size: 44px; display: block; margin-bottom: 12px;">🧁</span>
+        <h3 style="margin-bottom: 8px; color: var(--chocolate);">Nenhum pedido em andamento no momento</h3>
+        <p class="card-desc" style="max-width: 480px; margin: 0 auto 24px; line-height: 1.6;">
+          Você não possui nenhum pedido sendo preparado ou em rota de entrega no momento.
         </p>
-        <a href="{{ url_for('routes.index') }}" class="btn btn-mel">Ir para a Vitrine Gourmet</a>
+        
+        <div style="max-width: 440px; margin: 0 auto 24px; background: var(--bg-surface); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--borda); text-align: left;">
+          <form action="{{ url_for('routes.rastreio') }}" method="GET">
+            <label style="font-size: 13px; font-weight: 700; color: var(--chocolate); display: block; margin-bottom: 6px;">
+              🔍 Deseja consultar um pedido anterior? Digite o número:
+            </label>
+            <div style="display: flex; gap: 8px;">
+              <input type="number" name="id" class="form-control" placeholder="Ex: 8" style="flex: 1;" required>
+              <button type="submit" class="btn btn-chocolate" style="padding: 8px 16px; font-size: 13px;">Consultar</button>
+            </div>
+          </form>
+        </div>
+
+        <a href="{{ url_for('routes.index') }}" class="btn btn-mel">Fazer um Novo Pedido Gourmet ➔</a>
       </div>
     {% else %}
       <div class="timeline-container" id="tracker-box" data-pedido-id="{{ pedido.id }}" data-status-atual="{{ pedido.status_entrega }}">
@@ -128,7 +152,7 @@
         </div>
 
         <p style="font-size: 11.5px; color: var(--marrom-medio); margin-bottom: 16px;">
-          ℹ️ <em>O status de produção e entrega é atualizado exclusivamente pela equipe no <strong>Painel de Gestão da Loja</strong>. Esta tela consulta o banco de dados a cada 10 segundos.</em>
+          ⚡ <em>Acompanhamento em tempo real: O status deste pedido avança e sincroniza automaticamente a cada 10 segundos até a entrega. O operador da loja também pode intervir pelo painel de gestão.</em>
         </p>
 
         <!-- Itens do Pedido -->

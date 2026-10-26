@@ -88,7 +88,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
     console.log(`[Rastreio] Monitorando Pedido #${pedidoId} a cada 10s. Status inicial: ${statusAtual}`);
 
-    setInterval(async () => {
+    // Se já foi entregue no carregamento inicial, oculta o indicador ao vivo
+    if (statusAtual === "ENTREGUE") {
+      const pulseLive = document.getElementById("pulse-badge-live");
+      if (pulseLive) pulseLive.style.display = "none";
+    }
+
+    const intervalId = setInterval(async () => {
+      if (statusAtual === "ENTREGUE") {
+        clearInterval(intervalId);
+        return;
+      }
+
       try {
         const resp = await fetch(`/api/pedido/${pedidoId}/status`, {
           headers: { "Accept": "application/json" }
@@ -113,6 +124,13 @@ document.addEventListener("DOMContentLoaded", () => {
               badgeSidebar.textContent = formatarStatus(statusAtual);
               badgeSidebar.style.background = getBadgeBg(statusAtual);
               badgeSidebar.style.color = getBadgeColor(statusAtual);
+            }
+
+            // Se atingiu ENTREGUE, oculta o badge e encerra o ciclo de polling
+            if (statusAtual === "ENTREGUE") {
+              const pulseLive = document.getElementById("pulse-badge-live");
+              if (pulseLive) pulseLive.style.display = "none";
+              clearInterval(intervalId);
             }
 
             // Exibe notificação ao cliente

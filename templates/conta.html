@@ -102,6 +102,7 @@
       <h3>Já possui uma conta?</h3>
       <p class="card-desc">Entre com seu e-mail e senha cadastrados para acessar seus pedidos.</p>
       <form action="{{ url_for('routes.login') }}" method="POST">
+        <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
         <div class="form-group">
           <label>E-mail</label>
           <input type="email" name="email" class="form-control" placeholder="cliente@exemplo.com" required>
@@ -124,6 +125,7 @@
       <h3>Primeira vez na loja? Cadastre-se</h3>
       <p class="card-desc">Leva menos de 1 minuto para preencher e liberar seus pedidos.</p>
       <form action="{{ url_for('routes.cadastrar') }}" method="POST">
+        <input type="hidden" name="next" value="{{ request.args.get('next', '') }}">
         <div class="form-group">
           <label>Nome Completo</label>
           <input type="text" name="nome" class="form-control" placeholder="Seu nome completo" required>

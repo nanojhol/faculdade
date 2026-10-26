@@ -570,6 +570,29 @@
       display: none;
       z-index: 1000;
     }
+    .pulse-indicator {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      font-size: 12px;
+      font-weight: 600;
+      color: #2e7d32;
+      background: #e8f5e9;
+      padding: 3px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .pulse-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #2e7d32;
+      animation: pulseAnimation 2s infinite;
+    }
+    @keyframes pulseAnimation {
+      0% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 125, 50, 0.7); }
+      70% { transform: scale(1.1); box-shadow: 0 0 0 6px rgba(46, 125, 50, 0); }
+      100% { transform: scale(0.95); box-shadow: 0 0 0 0 rgba(46, 125, 50, 0); }
+    }
   </style>
 </head>
 <body>
@@ -833,42 +856,75 @@
     <!-- 5. ACOMPANHAMENTO DO PEDIDO -->
     <section id="rastreio" hidden>
       <div class="section-title" style="text-align: center;">
-        <h2>Acompanhamento da Entrega</h2>
-        <p>Acompanhe em tempo real o status de produção e deslocamento do seu pedido.</p>
+        <div style="display: flex; justify-content: center; align-items: center; gap: 10px; margin-bottom: 8px;">
+          <h2>Acompanhamento em Tempo Real</h2>
+          <span class="pulse-indicator" id="proto-pulse-live" style="display: none;" title="O sistema sincroniza o status a cada 10s">
+            <span class="pulse-dot"></span> Ao vivo (10s)
+          </span>
+        </div>
+        <p>Consulte a situação do preparo e da entrega do seu pedido gourmet.</p>
       </div>
 
-      <div class="timeline-container">
-        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--borda); padding-bottom: 14px;">
+      <!-- Estado Zerado / Sem pedido em andamento -->
+      <div id="proto-rastreio-vazio" class="card-cupcake" style="box-shadow: var(--sombra-card); text-align: center; padding: 48px 24px; border-top: 4px solid var(--borda); max-width: 820px; margin: 0 auto;">
+        <span style="font-size: 44px; display: block; margin-bottom: 12px;">🧁</span>
+        <h3 style="margin-bottom: 8px; color: var(--chocolate);">Nenhum pedido em andamento no momento</h3>
+        <p class="card-desc" style="max-width: 480px; margin: 0 auto 24px; line-height: 1.6;">
+          Você não possui pedidos sendo preparados ou em rota de entrega no momento.
+        </p>
+
+        <div style="max-width: 440px; margin: 0 auto 24px; background: var(--bg-surface); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--borda); text-align: left;">
+          <form onsubmit="event.preventDefault(); buscarPedidoPrototipo();">
+            <label style="font-size: 13px; font-weight: 700; color: var(--chocolate); display: block; margin-bottom: 6px;">
+              🔍 Já possui um número de pedido? Digite abaixo:
+            </label>
+            <div style="display: flex; gap: 8px;">
+              <input type="number" id="proto-busca-id" class="form-control" placeholder="Ex: 1001" style="flex: 1;" required>
+              <button type="submit" class="btn btn-chocolate" style="padding: 8px 16px; font-size: 13px;">Consultar</button>
+            </div>
+          </form>
+        </div>
+
+        <button onclick="navegarPara('vitrine')" class="btn btn-mel">Fazer um Novo Pedido Gourmet ➔</button>
+      </div>
+
+      <!-- Container Ativo da Timeline -->
+      <div class="timeline-container" id="proto-rastreio-ativo" style="display: none;">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--borda); padding-bottom: 14px; flex-wrap: wrap; gap: 10px;">
           <div>
             <h3 style="font-family:'Playfair Display', Georgia, serif; font-size: 22px; color: var(--chocolate);" id="rastreio-id">Pedido #1001</h3>
             <p style="font-size: 13px; color: var(--marrom-medio);" id="rastreio-data">Data: Hoje • Entrega prevista em 15–30 min</p>
           </div>
-          <span class="stock-tag" style="background:#e8f5e9; color:#2e7d32; font-size:12px; padding:6px 12px;">Pagamento Aprovado</span>
+          <span class="stock-tag" id="rastreio-pgto-tag" style="background:#e8f5e9; color:#2e7d32; font-size:12px; padding:6px 14px;">Pagamento: CONFIRMADO (PIX)</span>
         </div>
 
         <div class="timeline-steps">
-          <div class="step-item completed" id="step-1">1. Recebido</div>
-          <div class="step-item active" id="step-2">2. Em Preparo</div>
+          <div class="step-item" id="step-1">1. Recebido</div>
+          <div class="step-item" id="step-2">2. Em Preparo</div>
           <div class="step-item" id="step-3">3. Em Rota</div>
           <div class="step-item" id="step-4">4. Entregue</div>
         </div>
 
         <div class="alert-box alert-info" id="rastreio-mensagem-status">
-          🧁 <strong>Na cozinha:</strong> Seus cupcakes estão sendo finalizados artesanalmente com ingredientes frescos.
+          📥 <strong>Pedido recebido:</strong> O pedido foi registrado com sucesso e está na fila da cozinha.
         </div>
 
-        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; font-size: 14px; background: var(--bg-surface); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--borda);">
+        <p style="font-size: 11.5px; color: var(--marrom-medio); margin-bottom: 16px;">
+          ⚡ <em>Acompanhamento em tempo real: O status deste pedido avança e sincroniza automaticamente a cada 10 segundos até a entrega final.</em>
+        </p>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; font-size: 14px; background: var(--bg-surface); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--borda);">
           <div>
-            <p style="color: var(--marrom-medio); font-size: 12px; text-transform: uppercase; font-weight: 600;">Destino</p>
+            <p style="color: var(--marrom-medio); font-size: 11px; text-transform: uppercase; font-weight: 700;">Destino</p>
             <p><strong id="rastreio-end-texto">Rua das Flores, 123</strong></p>
           </div>
           <div>
-            <p style="color: var(--marrom-medio); font-size: 12px; text-transform: uppercase; font-weight: 600;">Forma de Pagamento</p>
+            <p style="color: var(--marrom-medio); font-size: 11px; text-transform: uppercase; font-weight: 700;">Forma de Pagamento</p>
             <p><strong id="rastreio-forma-texto">PIX</strong></p>
           </div>
           <div>
-            <p style="color: var(--marrom-medio); font-size: 12px; text-transform: uppercase; font-weight: 600;">Valor Total</p>
-            <p><strong id="rastreio-valor-texto">R$ 34,00</strong></p>
+            <p style="color: var(--marrom-medio); font-size: 11px; text-transform: uppercase; font-weight: 700;">Valor Total</p>
+            <p><strong id="rastreio-valor-texto" style="color: var(--chocolate); font-size: 16px;">R$ 34,00</strong></p>
           </div>
         </div>
       </div>
@@ -971,15 +1027,9 @@
     const TAXA_ENTREGA = 6.00;
     let carrinho = {};
     let usuarioLogado = null; // { nome, email }
-    let pedidoAtivo = {
-      id: 1001,
-      cliente: "Cliente Demonstração",
-      endereco: "Rua das Flores, 123 - Centro",
-      formaPgto: "PIX",
-      statusPgto: "CONFIRMADO",
-      statusEntrega: "PREPARANDO",
-      total: 34.00
-    };
+    let pedidoAtivo = null; // Inicia sem pedido em andamento
+    let historicoPedidos = []; // Lista de pedidos do cliente
+    let timerRastreio10s = null;
 
     // 2. ATUALIZAR TOPO COM PERFIL DO USUÁRIO
     function atualizarHeaderUsuario() {
@@ -1186,6 +1236,9 @@
     }
 
     function atualizarInterfaceStatus() {
+      const boxVazio = document.getElementById("proto-rastreio-vazio");
+      const boxAtivo = document.getElementById("proto-rastreio-ativo");
+      const badgeLive = document.getElementById("proto-pulse-live");
       const tag = document.getElementById("op-status-tag");
       const msg = document.getElementById("rastreio-mensagem-status");
       const s1 = document.getElementById("step-1");
@@ -1193,42 +1246,75 @@
       const s3 = document.getElementById("step-3");
       const s4 = document.getElementById("step-4");
 
-      [s1, s2, s3, s4].forEach(s => s.className = "step-item");
-
-      if (pedidoAtivo.statusEntrega === "RECEBIDO") {
-        s1.className = "step-item completed";
-        tag.textContent = "Recebido";
-        tag.style.background = "#e3f2fd";
-        tag.style.color = "#1565c0";
-        msg.innerHTML = "📥 <strong>Pedido recebido:</strong> O pedido foi registrado com sucesso e está na fila da cozinha.";
-      } else if (pedidoAtivo.statusEntrega === "PREPARANDO") {
-        s1.className = "step-item completed";
-        s2.className = "step-item active";
-        tag.textContent = "Em Preparo";
-        tag.style.background = "#fff3e0";
-        tag.style.color = "#e65100";
-        msg.innerHTML = "🧁 <strong>Na cozinha:</strong> Seus cupcakes estão sendo finalizados artesanalmente com ingredientes frescos.";
-      } else if (pedidoAtivo.statusEntrega === "EM_ROTA") {
-        s1.className = "step-item completed";
-        s2.className = "step-item completed";
-        s3.className = "step-item active";
-        tag.textContent = "Em Rota";
-        tag.style.background = "#f3e5f5";
-        tag.style.color = "#7b1fa2";
-        msg.innerHTML = "🛵 <strong>A caminho:</strong> O entregador já retirou sua encomenda e está em rota de entrega rápida.";
-      } else if (pedidoAtivo.statusEntrega === "ENTREGUE") {
-        s1.className = "step-item completed";
-        s2.className = "step-item completed";
-        s3.className = "step-item completed";
-        s4.className = "step-item completed";
-        tag.textContent = "Entregue";
-        tag.style.background = "#e8f5e9";
-        tag.style.color = "#2e7d32";
-        msg.innerHTML = "✨ <strong>Pedido entregue:</strong> Aproveite seus cupcakes artesanais! Agradecemos pela preferência.";
+      if (!pedidoAtivo) {
+        if (boxVazio) boxVazio.style.display = "block";
+        if (boxAtivo) boxAtivo.style.display = "none";
+        if (badgeLive) badgeLive.style.display = "none";
+        return;
       }
+
+      if (boxVazio) boxVazio.style.display = "none";
+      if (boxAtivo) boxAtivo.style.display = "block";
+
+      if (pedidoAtivo.statusEntrega === "ENTREGUE") {
+        if (badgeLive) badgeLive.style.display = "none";
+      } else {
+        if (badgeLive) badgeLive.style.display = "inline-flex";
+        iniciarTimerRastreio10s();
+      }
+
+      if (s1 && s2 && s3 && s4) {
+        [s1, s2, s3, s4].forEach(s => s.className = "step-item");
+
+        if (pedidoAtivo.statusEntrega === "RECEBIDO") {
+          s1.className = "step-item completed";
+          if (tag) { tag.textContent = "Recebido"; tag.style.background = "#e3f2fd"; tag.style.color = "#1565c0"; }
+          if (msg) msg.innerHTML = "📥 <strong>Pedido recebido:</strong> O pedido foi registrado com sucesso e está na fila da cozinha.";
+        } else if (pedidoAtivo.statusEntrega === "PREPARANDO") {
+          s1.className = "step-item completed";
+          s2.className = "step-item active";
+          if (tag) { tag.textContent = "Em Preparo"; tag.style.background = "#fff3e0"; tag.style.color = "#e65100"; }
+          if (msg) msg.innerHTML = "🧁 <strong>Na cozinha:</strong> Seus cupcakes estão sendo finalizados artesanalmente com carinho.";
+        } else if (pedidoAtivo.statusEntrega === "EM_ROTA") {
+          s1.className = "step-item completed";
+          s2.className = "step-item completed";
+          s3.className = "step-item active";
+          if (tag) { tag.textContent = "Em Rota"; tag.style.background = "#f3e5f5"; tag.style.color = "#7b1fa2"; }
+          if (msg) msg.innerHTML = "🛵 <strong>A caminho:</strong> O entregador já retirou sua encomenda e está em rota de entrega rápida.";
+        } else if (pedidoAtivo.statusEntrega === "ENTREGUE") {
+          s1.className = "step-item completed";
+          s2.className = "step-item completed";
+          s3.className = "step-item completed";
+          s4.className = "step-item completed";
+          if (tag) { tag.textContent = "Entregue"; tag.style.background = "#e8f5e9"; tag.style.color = "#2e7d32"; }
+          if (msg) msg.innerHTML = "✨ <strong>Pedido entregue:</strong> Aproveite seus cupcakes artesanais! Agradecemos pela preferência.";
+        }
+      }
+
+      document.getElementById("rastreio-id").textContent = `Pedido #${pedidoAtivo.id}`;
+      document.getElementById("rastreio-end-texto").textContent = pedidoAtivo.endereco;
+      document.getElementById("rastreio-forma-texto").textContent = pedidoAtivo.formaPgto;
+      document.getElementById("rastreio-valor-texto").textContent = `R$ ${pedidoAtivo.total.toFixed(2).replace('.', ',')}`;
+
+      const opNum = document.getElementById("op-pedido-num");
+      if (opNum) opNum.textContent = `#${pedidoAtivo.id}`;
+      const opCli = document.getElementById("op-cliente-nome");
+      if (opCli) opCli.textContent = pedidoAtivo.cliente;
+      const opEnd = document.getElementById("op-endereco-texto");
+      if (opEnd) opEnd.textContent = pedidoAtivo.endereco;
+      const opTot = document.getElementById("op-total-texto");
+      if (opTot) opTot.textContent = `R$ ${pedidoAtivo.total.toFixed(2).replace('.', ',')}`;
     }
 
     function navegarPara(telaId) {
+      if (telaId === "rastreio") {
+        if (!usuarioLogado) {
+          mostrarToast("Por favor, faça login ou cadastre-se para acompanhar seus pedidos.");
+          navegarPara("conta");
+          return;
+        }
+      }
+
       document.querySelectorAll("main > section").forEach(sec => sec.hidden = sec.id !== telaId);
       document.querySelectorAll("nav button").forEach(btn => {
         btn.setAttribute("aria-current", btn.dataset.tela === telaId ? "page" : "false");
@@ -1242,7 +1328,42 @@
           return;
         }
       }
+      if (telaId === "rastreio") {
+        atualizarInterfaceStatus();
+      }
       window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function iniciarTimerRastreio10s() {
+      if (timerRastreio10s) clearInterval(timerRastreio10s);
+      timerRastreio10s = setInterval(() => {
+        if (pedidoAtivo && pedidoAtivo.statusEntrega !== "ENTREGUE") {
+          const FLUXO = ["RECEBIDO", "PREPARANDO", "EM_ROTA", "ENTREGUE"];
+          let idx = FLUXO.indexOf(pedidoAtivo.statusEntrega);
+          if (idx < FLUXO.length - 1) {
+            pedidoAtivo.statusEntrega = FLUXO[idx + 1];
+            atualizarInterfaceStatus();
+            mostrarToast(`🛵 Pedido #${pedidoAtivo.id} avançou: ${pedidoAtivo.statusEntrega}!`);
+          }
+        } else {
+          clearInterval(timerRastreio10s);
+        }
+      }, 10000);
+    }
+
+    function buscarPedidoPrototipo() {
+      const idInput = parseInt(document.getElementById("proto-busca-id").value);
+      if (!idInput) return;
+      const achado = historicoPedidos.find(p => p.id === idInput);
+      if (achado) {
+        pedidoAtivo = achado;
+        atualizarInterfaceStatus();
+        mostrarToast(`Mostrando Pedido #${achado.id}.`);
+      } else if (pedidoAtivo && pedidoAtivo.id === idInput) {
+        atualizarInterfaceStatus();
+      } else {
+        mostrarToast("Pedido não encontrado no histórico.");
+      }
     }
 
     document.querySelectorAll("nav button").forEach(btn => {
