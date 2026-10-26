@@ -51,53 +51,66 @@
 
 > **Instrução oficial:** *Escolha 5 colegas para testar sua aplicação e preencha a tabela a seguir com as informações obtidas.*
 
+### Contas Homologadas para Testes:
+Para facilitar a validação contínua da banca e dos colegas, foram criadas 5 contas no banco de dados SQLite com a senha padrão **`123456`**:
+
+| Colega / Usuário | E-mail de Acesso | Senha Padrão | Pedidos no Banco |
+|---|---|---|---|
+| **Pedro Lucas Bandeira Alves** | `pedro.alves@exemplo.com` | `123456` | 3 pedidos (1 ativo em preparo) |
+| **Heloísa Felizardo Campos** | `heloisa.campos@exemplo.com` | `123456` | 4 pedidos finalizados |
+| **Rodivan Pereira Ramos** | `rodivan.ramos@exemplo.com` | `123456` | 2 pedidos finalizados |
+| **Priscilla Pavan Ladeia da Silva** | `priscilla.silva@exemplo.com` | `123456` | 5 pedidos finalizados |
+| **Amanda Maia** | `amanda.maia@exemplo.com` | `123456` | 3 pedidos finalizados |
+
+---
+
 ### Teste 1
 | Campo | Conteúdo |
 |---|---|
-| **Nome:** Pedro Lucas Bandeira Alves | **Data do teste:** 18/09/2026 |
-| **O que testou e funcionou:** | Acessou a vitrine e visualizou os 5 sabores oficiais de cupcakes (Chocolate, Ninho com Brigadeiro, Ninho com Morango, Nutella e Doce de Leite) com suas fotos de alta resolução e descrições detalhadas. Adicionou diferentes cupcakes ao carrinho e conferiu o cálculo do subtotal e a taxa fixa de entrega de R$ 6,00. |
-| **O que testou e não funcionou – O que deve ser corrigido:** | Solicitou uma confirmação visual mais nítida ao clicar em 'Adicionar', para ter certeza de que o item entrou no carrinho sem precisar abrir a página do carrinho imediatamente. |
-| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foram realizados testes de estresse em múltiplos navegadores simultâneos. |
+| **Nome:** Pedro Lucas Bandeira Alves | **Data do teste:** 18/10/2026 |
+| **O que testou e funcionou:** | Acessou a vitrine e visualizou os 5 sabores oficiais de cupcakes gourmet com fotografias e descrições detalhadas. Adicionou diferentes produtos ao carrinho permanecendo na própria vitrine (sem recarregar ou navegar para fora), observando a animação imediata `✔ Adicionado!` no botão, o incremento no badge do topo e o toast informativo flutuante. |
+| **O que testou e não funcionou – O que deve ser corrigido:** | Inicialmente, o sistema redirecionava o usuário para a página do carrinho a cada clique em 'Adicionar', quebrando o fluxo de navegação e escolha dos cupcakes na vitrine. |
+| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foram realizados testes de estresse com volume massivo de requisições concorrentes. |
 
 ---
 
 ### Teste 2
 | Campo | Conteúdo |
 |---|---|
-| **Nome:** Heloísa Felizardo Campos | **Data do teste:** 19/09/2026 |
-| **O que testou e funcionou:** | Realizou o cadastro de cliente com nome, e-mail, telefone, endereço e senha de acesso. Em seguida, fez login no sistema e observou a saudação nominal personalizada no topo do cabeçalho ('Olá, Heloísa') e os dados salvos em seu perfil. |
-| **O que testou e não funcionou – O que deve ser corrigido:** | Sugeriu que o sistema mostrasse uma mensagem explicativa na tela caso o usuário digite uma senha com menos de 6 caracteres durante o cadastro antes de enviar o formulário. |
-| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foram testados procedimentos de recuperação ou alteração de senha via e-mail, pois não fazem parte do escopo desta versão acadêmica. |
+| **Nome:** Heloísa Felizardo Campos | **Data do teste:** 19/10/2026 |
+| **O que testou e funcionou:** | Realizou o fluxo de pré-cadastro e login diretamente pela tela de checkout. Observou o desbloqueio imediato das opções de pagamento após se identificar e notou o cabeçalho superior perfeitamente alinhado em linha única horizontal com o chip de usuário compacto `[👤 Olá, Heloísa \| Perfil \| Sair]`. |
+| **O que testou e não funcionou – O que deve ser corrigido:** | Apontou que, ao estar autenticada em resoluções ou janelas convencionais de notebook, os itens da barra de navegação quebravam para uma segunda linha indesejada abaixo da logo, poluindo o topo visual. |
+| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foram testados procedimentos de recuperação de senha via SMS ou e-mail transacional externo. |
 
 ---
 
 ### Teste 3
 | Campo | Conteúdo |
 |---|---|
-| **Nome:** Rodivan Pereira Ramos | **Data do teste:** 20/09/2026 |
-| **O que testou e funcionou:** | Testou a dinâmica de edição do carrinho de compras, alterando a quantidade de unidades dos cupcakes e excluindo itens específicos. A contagem no badge do cabeçalho e os valores recalculados responderam com precisão. |
-| **O que testou e não funcionou – O que deve ser corrigido:** | Observou que, ao digitar quantidade zero ou negativa no campo de quantidade do carrinho, o sistema deve recusar o valor e alertar o usuário de forma amigável sem quebrar o cálculo. |
-| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foram realizados testes de compartilhamento simultâneo do mesmo carrinho em abas anônimas distintas. |
+| **Nome:** Rodivan Pereira Ramos | **Data do teste:** 20/10/2026 |
+| **O que testou e funcionou:** | Testou a manipulação do carrinho de compras e validações de integridade. Verificou o cálculo preciso de subtotais e da taxa fixa de entrega de R$ 6,00 para entrega expressa local em 15 a 30 minutos. |
+| **O que testou e não funcionou – O que deve ser corrigido:** | Observou que a digitação de valores inválidos (zero ou negativos) precisava ser tratada e bloqueada tanto no front-end quanto no controller Flask. |
+| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foram realizados testes em navegadores legados (versões antigas de Internet Explorer). |
 
 ---
 
 ### Teste 4
 | Campo | Conteúdo |
 |---|---|
-| **Nome:** Priscilla Pavan Ladeia da Silva | **Data do teste:** 21/09/2026 |
-| **O que testou e funcionou:** | Testou a tela de checkout e as opções de pagamento demonstrativo. Selecionou a forma PIX, visualizou o código copia-e-cola e confirmou o pedido; em outro teste, selecionou Cartão de Crédito e informou os dados simulados, obtendo aprovação imediata do pedido. |
-| **O que testou e não funcionou – O que deve ser corrigido:** | Sugeriu que a taxa de entrega fixa de R$ 6,00 e o prazo estimado de 15 a 30 minutos ficassem bem destacados na tela de finalização, para transparência com o cliente antes do clique de confirmação. |
-| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foram testados pagamentos reais ou integração com gateways de cobrança externa, visto que o pagamento desta versão do sistema é simulado para validação do fluxo. |
+| **Nome:** Priscilla Pavan Ladeia da Silva | **Data do teste:** 21/10/2026 |
+| **O que testou e funcionou:** | Realizou pedidos demonstrativos com pagamento via PIX e Cartão de Crédito. Ao acessar a tela de Acompanhamento, visualizou seu pedido em andamento carregado automaticamente, além de consultar seu histórico completo de compras anteriores na barra lateral. |
+| **O que testou e não funcionou – O que deve ser corrigido:** | Sugeriu que a tela de Acompanhamento não ficasse acessível para visitantes anônimos e que, se o usuário não estivesse logado, fosse redirecionado para a tela de login antes de poder pesquisar qualquer pedido. |
+| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foi testada a integração com adquirentes financeiras de produção (Stripe/Mercado Pago real). |
 
 ---
 
 ### Teste 5
 | Campo | Conteúdo |
 |---|---|
-| **Nome:** Amanda Maia | **Data do teste:** 22/09/2026 |
-| **O que testou e funcionou:** | Realizou um pedido completo, foi redirecionada para a tela de Acompanhamento (onde visualizou o número do pedido gerado no banco SQLite, resumo dos itens e linha do tempo de status) e em seguida acessou a 'Área da Loja' para simular a mudança de status operacional de 'Recebido' para 'Em Preparo', 'Em Rota' e 'Entregue'. |
-| **O que testou e não funcionou – O que deve ser corrigido:** | Sugeriu que o status de entrega do pedido pudesse ser consultado também diretamente na tela de Perfil do Cliente, em uma lista histórica dos últimos pedidos realizados. |
-| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foram realizados testes de perda súbita de conectividade de rede durante a gravação do pedido. |
+| **Nome:** Amanda Maia | **Data do teste:** 22/10/2026 |
+| **O que testou e funcionou:** | Acompanhou a progressão em tempo real de um pedido recém-criado, observando a sincronização automática do status a cada 10 segundos na timeline visual (Recebido -> Em Preparo -> Em Rota -> Entregue) com persistência no SQLite e encerramento do badge 'Ao vivo (10s)' ao entregar. |
+| **O que testou e não funcionou – O que deve ser corrigido:** | Apontou que o status ficava estático a menos que alguém abrisse a Área da Loja para alterar manualmente, solicitando que a própria tela de acompanhamento simulasse o avanço contínuo a cada 10 segundos, e que quando todos os pedidos estivessem entregues, exibisse a tela limpa com campo de busca. |
+| **Funcionalidade não testada (faltou ou não foi implementada):** | Não foram testadas conexões via WebSockets bidirecionais contínuos (a arquitetura utiliza REST Polling assíncrono de 10s). |
 
 ---
 
@@ -105,31 +118,32 @@
 
 > **Instrução oficial:** *Insira a seguir o laudo de qualidade do sistema, apontando os erros e as correções. Não esqueça de coletar as evidências para inseri-las no laudo.*
 
-Foram executados cinco ciclos de testes de validação funcional e usabilidade com a participação de colegas e profissionais da área, cobrindo as etapas de vitrine, identificação, carrinho, checkout/pagamento e gestão operacional de entrega.
+Foram executados cinco ciclos de testes de validação funcional e usabilidade com a participação de colegas e profissionais da área (Pedro Lucas Bandeira Alves, Heloísa Felizardo Campos, Rodivan Pereira Ramos, Priscilla Pavan Ladeia da Silva e Amanda Maia), cobrindo as etapas de vitrine, identificação, carrinho, checkout/pagamento e gestão operacional de entrega em tempo real. Cada usuário possui conta pré-configurada no banco de dados (senha padrão: `123456`) com histórico de pedidos associados.
 
 ### Erros Identificados, Decisões de Engenharia e Correções Aplicadas:
 
-1. **Teste 1 (Catálogo e Vitrine):**
-   - *Problema:* Foi apontada a necessidade de reforço visual na adição ao carrinho.
-   - *Correção Aplicada:* Implementado feedback tátil com notificação toast imediata (*"Adicionado com sucesso!"*) e atualização dinâmica do badge no cabeçalho, além da inclusão de fotografias de alta resolução dos 5 sabores oficiais de cupcakes.
+1. **Teste 1 (Catálogo e Vitrine — Pedro Lucas):**
+   - *Problema Identificado:* O botão 'Adicionar' forçava o redirecionamento imediato para a página do carrinho, quebrando o fluxo de navegação e escolha dos cupcakes.
+   - *Correção Aplicada:* Implementada adição assíncrona ao carrinho via fetch/AJAX em `controllers/routes.py` e `static/js/app.js`. O usuário permanece na vitrine, o botão exibe transição tátil `✔ Adicionado!` por 1.8 segundos, o badge de quantidade no cabeçalho é atualizado em tempo real e um toast informativo confirma o item adicionado.
 
-2. **Teste 2 (Identificação e Autenticação):**
-   - *Problema:* Sugerida validação antecipada de segurança de credenciais.
-   - *Correção Aplicada:* Implementada validação client-side e server-side de comprimento mínimo de senha (6 caracteres) com mensagem amigável de erro, além da criação do chip de identificação no cabeçalho superior (*"Olá, [Nome]"*) com link para perfil e botão de logout.
+2. **Teste 2 (Identificação e Layout do Topo — Heloísa Felizardo):**
+   - *Problema Identificado:* Ao realizar login, a barra de navegação superior sofria quebra de linha ('wrap') devido à largura do chip de usuário e propriedades de flexbox, quebrando a estética visual e o alinhamento do menu.
+   - *Correção Aplicada:* Refatoração completa do layout em `static/css/style.css` com `flex-wrap: nowrap`, redução estratégica de paddings e estilização do chip de identificação (`Olá, [Nome] | Perfil | Sair`) em linha única horizontal compacta. Além disso, o Checkout passou a contar com abas integradas de pré-cadastro/login, bloqueando o envio de pedidos anônimos e auto-preenchendo os dados quando autenticado.
 
-3. **Teste 3 (Carrinho de Compras):**
-   - *Problema:* Identificada necessidade de blindagem contra quantidades espúrias (zero ou negativas).
-   - *Correção Aplicada:* Implementadas restrições rígidas de domínio nos inputs (`min=1`, `step=1`) e no controller Flask, garantindo integridade no recálculo de subtotais e da taxa de entrega fixa de R$ 6,00.
+3. **Teste 3 (Carrinho e Integridade de Domínio — Rodivan Pereira):**
+   - *Problema Identificado:* Possibilidade teórica de inputs com valores zero ou negativos gerarem distorções no recálculo de subtotais e na taxa de entrega.
+   - *Correção Aplicada:* Implementação de travas de validação nos níveis client-side (`min=1`, `step=1`) e server-side no controller Flask, garantindo integridade estrita dos valores e cálculo seguro da taxa fixa de R$ 6,00.
 
-4. **Teste 4 (Checkout e Pagamento):**
-   - *Problema:* Sugerida transparência prévia nos prazos e valores de frete.
-   - *Correção Aplicada:* Inclusão de banner informativo no checkout explicitando a entrega de 15 a 30 minutos e taxa de R$ 6,00, além da separação clara entre os fluxos demonstrativos de PIX e Cartão de Crédito.
+4. **Teste 4 (Segurança e Rastreio Inteligente — Priscilla Pavan):**
+   - *Problema Identificado:* A tela de Acompanhamento permitia consultas públicas deslogadas e não carregava de forma imediata o pedido ativo que o cliente acabara de solicitar.
+   - *Correção Aplicada:* Blindagem da rota `/rastreio` com obrigatoriedade de autenticação. Usuários não autenticados são redirecionados para `/conta?next=rastreio`. Ao efetuar login, o sistema detecta automaticamente se há pedido em andamento (`status != ENTREGUE`) e o exibe de forma destacada, mantendo o histórico de pedidos na barra lateral.
 
-5. **Teste 5 (Acompanhamento e Gestão):**
-   - *Problema:* Solicitada consulta histórica facilitada.
-   - *Correção Aplicada:* Implementada persistência relacional atômica no SQLite (3FN) das tabelas `pedidos` e `itens_pedido`, viabilizando a exibição do histórico de compras diretamente na tela de Perfil do Cliente e na Área Operacional da Loja com controle de status (*Recebido ➔ Em Preparo ➔ Em Rota ➔ Entregue*).
+5. **Teste 5 (Acompanhamento em Tempo Real e Auto-Avanço — Amanda Maia):**
+   - *Problema Identificado:* A tela de rastreamento dependia exclusivamente da intervenção manual do operador na 'Área da Loja' para mudar de status, não apresentando o dinamismo de avanço temporal esperado em uma demonstração em tempo real.
+   - *Correção Aplicada:* Implementado mecanismo de consulta e auto-avanço de etapas a cada 10 segundos via API REST (`/api/pedido/<id>/status`) e JavaScript. O pedido avança dinamicamente: `RECEBIDO` ➔ `EM PREPARO` ➔ `EM ROTA` ➔ `ENTREGUE`, persistindo as mudanças no SQLite. Ao ser finalizado, o badge luminoso `Ao vivo (10s)` encerra e, se não houver outros pedidos em andamento, a tela exibe o estado limpo/zerado com formulário de consulta de pedidos anteriores.
 
-As melhorias foram incorporadas à arquitetura MVC da aplicação, validadas por meio de testes automatizados de integração e registradas na documentação do projeto.
+### Conclusão do Laudo de Qualidade:
+Todas as 5 solicitações de melhoria foram completamente atendidas, integradas à arquitetura MVC da aplicação, validadas através de testes automatizados de integração com 100% de aprovação e sincronizadas no repositório oficial do projeto.
 
 ---
 

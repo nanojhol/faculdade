@@ -19,6 +19,8 @@ A ideia é que o cliente consiga ver os cupcakes, montar o pedido, fazer o pagam
 | [Script SQL](schema.sql) | DDL e carga inicial de produtos e clientes no SQLite |
 | [Diagramas](Diagramas.drawio) | Casos de uso, classes, sequência, atividades e mapas |
 | [Protótipo](Prototipo.html) | Telas, fotos reais dos 5 sabores, perfil no topo e fluxo navegável |
+| [Contas de Teste](#contas-teste) | 5 contas de demonstração pré-configuradas no SQLite (senha padrão: `123456`) |
+| [Melhorias dos Testes](#melhorias-recentes) | Correções aplicadas com base no feedback dos 5 usuários avaliadores |
 | [Etapa atual](#etapa-3) | Relatório oficial e laudo de testes concluídos / Validação final e envio |
 | [Ferramentas](#ferramentas) | O que usei e por quê |
 | [Registro das etapas](#registro) | O que foi feito e o que falta |
@@ -71,6 +73,50 @@ Vou seguir as três situações propostas pela faculdade. Vou registrar aqui o q
 
 **Ainda falta fazer:** conferência final e submissão da atividade no AVA.
 
+### Contas de Demonstração e Teste <a id="contas-teste"></a>
+
+Para facilitar a avaliação da banca, do professor e dos colegas, o banco de dados SQLite já possui 5 contas de teste cadastradas com histórico real de pedidos associados. Todas utilizam a mesma senha de acesso:
+
+**Senha padrão para todas as contas:** `123456`
+
+| Colega / Usuário Avaliador | E-mail de Acesso | Senha Padrão | Pedidos no Banco | Cenário em Destaque |
+|---|---|---|---|---|
+| **Pedro Lucas Bandeira Alves** | `pedro.alves@exemplo.com` | `123456` | 3 pedidos | Possui pedido ativo (`RECEBIDO`) para validar o auto-avanço de 10s no Rastreio |
+| **Heloísa Felizardo Campos** | `heloisa.campos@exemplo.com` | `123456` | 4 pedidos | Histórico completo de pedidos finalizados com layout de topo em linha única |
+| **Rodivan Pereira Ramos** | `rodivan.ramos@exemplo.com` | `123456` | 2 pedidos | Validações de carrinho e domínio numérico sem distorções de frete |
+| **Priscilla Pavan Ladeia da Silva** | `priscilla.silva@exemplo.com` | `123456` | 5 pedidos | Pedidos demonstrativos em PIX e Cartão com endereço fixo salvo |
+| **Amanda Maia** | `amanda.maia@exemplo.com` | `123456` | 3 pedidos | Testes do ciclo completo e tela zerada limpa quando sem pedidos ativos |
+
+> 💡 **Como testar o Acompanhamento em Tempo Real:** Faça login com `pedro.alves@exemplo.com` (senha `123456`) e clique em **Acompanhamento** no menu superior. O sistema carregará automaticamente o pedido ativo dele e você verá o status avançando a cada 10 segundos (`RECEBIDO` ➔ `EM PREPARO` ➔ `EM ROTA` ➔ `ENTREGUE`) com persistência no banco e notificações flutuantes!
+
+---
+
+### Melhorias Implementadas com Base nos Testes dos Usuários <a id="melhorias-recentes"></a>
+
+A partir dos 5 ciclos de testes de usabilidade e engenharia, foram identificados e solucionados os seguintes pontos críticos:
+
+1. **Adição Assíncrona ao Carrinho sem Redirecionamento (Pedro Lucas):**
+   - *Problema:* Clicar em "Adicionar" na vitrine forçava a navegação imediata para a tela de carrinho.
+   - *Solução:* Migrado para requisições AJAX (`fetch`), mantendo o cliente na vitrine. O botão exibe animação tátil (`✔ Adicionado!`) por 1.8 segundos, o contador numérico no cabeçalho pulsa e se atualiza na hora, e uma notificação *toast* confirma o cupcake adicionado.
+
+2. **Navbar em Linha Única e Pré-Cadastro no Checkout (Heloísa Felizardo):**
+   - *Problema:* Quando o usuário estava logado, o cabeçalho quebrava em duas linhas em janelas convencionais de notebook; além disso, clientes deslogados precisavam sair do carrinho para criar conta.
+   - *Solução:* Topo redesenhado com `flex-wrap: nowrap` e chip de usuário compacto (`[👤 Olá, Heloísa | Perfil | Sair]`), mantendo 100% do menu alinhado em linha única horizontal. No Checkout, foram criadas abas integradas de login e pré-cadastro, liberando as opções de pagamento somente após a identificação do cliente.
+
+3. **Validação Rigorosa de Domínio e Cálculo Seguro (Rodivan Pereira):**
+   - *Problema:* Vulnerabilidade a inputs zero ou negativos no carrinho.
+   - *Solução:* Blindagem com regras `min=1` no front-end e validação defensiva no controller Flask, garantindo integridade no recálculo de subtotais e da taxa fixa de entrega de R$ 6,00.
+
+4. **Proteção de Acesso e Carregamento Automático de Pedido Ativo (Priscilla Pavan):**
+   - *Problema:* A rota de acompanhamento ficava aberta a anônimos e não exibia diretamente a compra recente do cliente.
+   - *Solução:* Exigência estrita de autenticação em `/rastreio` (visitantes deslogados são redirecionados para login com retorno automático). Ao logar, o sistema detecta se há algum pedido em andamento (`status != ENTREGUE`) e o abre imediatamente com a timeline em tempo real.
+
+5. **Auto-Avanço de 10s no Rastreio e Tela Zerada Inteligente (Amanda Maia):**
+   - *Problema:* O acompanhamento exigia que alguém abrisse a Área da Loja para alterar status manualmente, e a tela inicial carregava números de pedidos de testes antigos.
+   - *Solução:* Implementado auto-avanço a cada 10 segundos via API REST (`/api/pedido/<id>/status`) persistindo a progressão no SQLite até a entrega final. Ao concluir, o badge luminoso `Ao vivo (10s)` encerra. Se não houver pedidos em andamento, a tela inicial abre limpa/zerada com formulário de consulta para pesquisar pedidos anteriores.
+
+---
+
 ### Ferramentas que usei <a id="ferramentas"></a>
 
 | Ferramenta ou formato | Uso no projeto | Por que usei |
@@ -97,6 +143,7 @@ Vou seguir as três situações propostas pela faculdade. Vou registrar aqui o q
 | Definição comercial e banco de dados | Defini os 5 sabores de cupcakes, descrições, preços, taxa fixa de R$ 6,00 e prazo de 15 a 30 min. Elaborei os modelos conceitual e lógico (3FN), executei o script físico em SQLite e criei o dicionário de dados. Atualizei o protótipo com os 5 sabores e cálculo real | SQLite, SQL (schema.sql), Markdown e HTML/CSS/JS para viabilizar a estrutura de dados e regras antes da codificação | Iniciar a estrutura da aplicação MVC em Python/Flask |
 | Desenvolvimento MVC e aprimoramento visual | Implementei a aplicação completa em padrão MVC (`models/database.py`, `controllers/routes.py`, `templates/`, `static/`), integrei fotos reais nos cards dos 5 cupcakes, destaquei o perfil do usuário logado na barra superior, criei a tela de perfil de cliente e elaborei o manual de uso | Python, Flask, Jinja2, SQLite, CSS com direção de arte editorial de confeitaria e Markdown | Preparar deploy e testes da solução |
 | Relatório oficial e laudo de testes | Elaborei o relatório completo de entrega da atividade contendo as tabelas de codificação, os 5 testes de usabilidade com participantes, o laudo de qualidade com correções comprovadas e o manual de execução | Python-docx, Markdown e Microsoft Word para formatação rigorosa no modelo institucional | Validação final de entrega e submissão no AVA |
+| Melhorias de Usabilidade e Homologação | Implementei o auto-avanço de 10s no rastreio, carrinho assíncrono via AJAX, pré-cadastro no checkout, layout de navbar em linha única e criei as 5 contas de teste no SQLite (senha `123456`) com pedidos reais sorteados | Python, Flask, SQLite, JavaScript Assíncrono, CSS Flexbox e suite de testes automatizada | Gravação dos vídeos demonstrativos e envio |
 
 A cada etapa, vou anotar o que fiz, quais arquivos mexi, a ferramenta que usei e o motivo. Se precisar corrigir alguma coisa, vou registrar a mudança sem apagar o que fiz antes.
 
