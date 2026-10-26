@@ -1,0 +1,72 @@
+{% extends "base.html" %}
+
+{% block title %}Painel Operacional da Loja — Sweet Cupcake Gourmet{% endblock %}
+
+{% block content %}
+<div class="section-title">
+  <h2>Painel de Gestão da Loja</h2>
+  <p>Módulo operacional restrito para consulta dos pedidos e avanço de status de entrega (HU15 / UC06).</p>
+</div>
+
+<div class="card-cupcake" style="box-shadow: var(--sombra-card);">
+  <h3>Fila de Pedidos Realizados</h3>
+  <p class="card-desc">Visualize e altere o status de entrega conforme o fluxo da cozinha e expedição.</p>
+
+  {% if not pedidos %}
+    <div class="alert-box alert-info">
+      Nenhum pedido foi realizado ainda no sistema.
+    </div>
+  {% else %}
+    <div class="table-container" style="margin-top: 16px;">
+      <table>
+        <thead>
+          <tr>
+            <th># Pedido</th>
+            <th>Cliente</th>
+            <th>Itens Comprados</th>
+            <th>Total</th>
+            <th>Status Atual</th>
+            <th>Avançar Etapa</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for p in pedidos %}
+          <tr>
+            <td><strong>#{{ p.id }}</strong></td>
+            <td>
+              {{ p.cliente_nome }}<br>
+              <small style="color: var(--marrom-medio);">{{ p.endereco_entrega }}</small>
+            </td>
+            <td>{{ p.resumo_itens }}</td>
+            <td><strong>R$ {{ "%.2f"|format(p.valor_total)|replace('.', ',') }}</strong></td>
+            <td>
+              {% if p.status_entrega == 'RECEBIDO' %}
+                <span class="stock-tag" style="background:#e3f2fd; color:#1565c0;">Recebido</span>
+              {% elif p.status_entrega == 'PREPARANDO' %}
+                <span class="stock-tag" style="background:#fff3e0; color:#e65100;">Preparando</span>
+              {% elif p.status_entrega == 'EM_ROTA' %}
+                <span class="stock-tag" style="background:#f3e5f5; color:#7b1fa2;">Em Rota</span>
+              {% else %}
+                <span class="stock-tag" style="background:#e8f5e9; color:#2e7d32;">Entregue</span>
+              {% endif %}
+            </td>
+            <td>
+              <form action="{{ url_for('routes.mudar_status_pedido') }}" method="POST" style="display: flex; gap: 6px;">
+                <input type="hidden" name="pedido_id" value="{{ p.id }}">
+                <select name="novo_status" class="form-control" style="padding: 4px 8px; font-size: 12px; width: auto;">
+                  <option value="RECEBIDO" {% if p.status_entrega == 'RECEBIDO' %}selected{% endif %}>Recebido</option>
+                  <option value="PREPARANDO" {% if p.status_entrega == 'PREPARANDO' %}selected{% endif %}>Preparando</option>
+                  <option value="EM_ROTA" {% if p.status_entrega == 'EM_ROTA' %}selected{% endif %}>Em Rota</option>
+                  <option value="ENTREGUE" {% if p.status_entrega == 'ENTREGUE' %}selected{% endif %}>Entregue</option>
+                </select>
+                <button type="submit" class="btn btn-chocolate" style="font-size: 11px; padding: 4px 10px;">Atualizar</button>
+              </form>
+            </td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+  {% endif %}
+</div>
+{% endblock %}

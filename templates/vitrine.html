@@ -1,0 +1,49 @@
+{% extends "base.html" %}
+
+{% block title %}Vitrine de Cupcakes — Sweet Cupcake Gourmet{% endblock %}
+
+{% block content %}
+<div class="hero-banner">
+  <div class="hero-content">
+    <span class="hero-tag">Produção Diária & Ingredientes Nobres</span>
+    <h2>A arte do verdadeiro cupcake artesanal</h2>
+    <p>Massa fofinha e aerada, recheios generosos e coberturas gourmet preparadas à mão todas as manhãs. Escolha seus sabores favoritos e receba ainda quentinho.</p>
+    <div class="hero-badges">
+      <span class="badge-pill">⏱ 15–30 min de entrega</span>
+      <span class="badge-pill">💳 PIX & Cartão de Crédito</span>
+      <span class="badge-pill">✨ Receitas Autorais</span>
+    </div>
+  </div>
+</div>
+
+<div class="section-title">
+  <h2>Catálogo de Sabores Oficiais</h2>
+  <p>Selecione a quantidade desejada e monte seu pedido artesanal.</p>
+</div>
+
+<div class="grid-cupcakes">
+  {% for p in produtos %}
+  <div class="card-cupcake">
+    <div>
+      <div class="card-img-wrap">
+        <img src="{{ url_for('static', filename=p.imagem) }}" alt="Cupcake {{ p.nome }}" loading="lazy">
+        <span class="card-tag-floating">Artesanal</span>
+      </div>
+      <h3>{{ p.nome }}</h3>
+      <p class="card-desc">{{ p.descricao }}</p>
+    </div>
+    <div class="card-footer">
+      <div class="price-tag">
+        <span class="price-value">R$ {{ "%.2f"|format(p.preco)|replace('.', ',') }}</span>
+        <span class="stock-tag">Em estoque</span>
+      </div>
+      <form action="{{ url_for('routes.adicionar_carrinho') }}" method="POST" class="action-group">
+        <input type="hidden" name="produto_id" value="{{ p.id }}">
+        <input type="number" name="quantidade" class="input-qtd" min="1" step="1" value="1" required>
+        <button type="submit" class="btn btn-mel" style="flex: 1;">Adicionar</button>
+      </form>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

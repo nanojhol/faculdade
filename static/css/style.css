@@ -1,0 +1,666 @@
+/* ==========================================================================
+   STYLE.CSS — SWEET CUPCAKE GOURMET
+   Direção de Arte: Confeitaria Editorial (Tokens da skill_design_jhol)
+   Paleta: Chocolate nobre, Mel dourado, Creme suave e Bege claro
+   ========================================================================== */
+
+:root {
+  --bg-base: #faf1e6;            /* Bege claro acolhedor */
+  --bg-surface: #fffaf2;         /* Fundo suave de cards e painéis */
+  --bg-card: #ffffff;            /* Branco puro para contraste de leitura */
+  --chocolate: #5c2406;          /* Tinta principal de autoridade e contraste */
+  --chocolate-dark: #3f1702;     /* Tom mais profundo para hover */
+  --chocolate-light: #7a350c;    /* Variação suave */
+  --mel: #d68424;                /* Acento dourado quente para ações principais */
+  --mel-hover: #bd701a;          /* Hover do botão mel */
+  --marrom-medio: #8c4c27;       /* Texto secundário e labels descritivas */
+  --marrom-suave: #b57a55;       /* Bordas sutis e linhas divisórias */
+  --borda: rgba(92, 36, 6, 0.12); /* Borda transparente elegante */
+  --borda-foco: #d68424;
+  --sombra-card: 0 10px 30px -10px rgba(92, 36, 6, 0.12);
+  --sombra-hover: 0 16px 40px -12px rgba(92, 36, 6, 0.20);
+  --sucesso: #2e7d32;
+  --sucesso-bg: #edf7ed;
+  --alerta-erro: #c62828;
+  --alerta-bg: #fde8e8;
+  --radius-sm: 8px;
+  --radius-md: 16px;
+  --radius-lg: 24px;
+  --radius-pill: 100px;
+  --transicao: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  background-color: var(--bg-base);
+  color: var(--chocolate);
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Topbar Informativa */
+.topbar-aviso {
+  background: var(--chocolate);
+  color: var(--bg-base);
+  font-size: 13px;
+  padding: 8px 16px;
+  text-align: center;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+}
+.topbar-aviso strong {
+  color: #f7d294;
+}
+
+/* Header & Navegação */
+header {
+  background: rgba(255, 250, 242, 0.95);
+  backdrop-filter: blur(10px);
+  border-bottom: 1px solid var(--borda);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 12px rgba(92, 36, 6, 0.04);
+}
+.header-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  padding: 14px 24px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+.brand-logo {
+  font-size: 32px;
+  filter: drop-shadow(0 2px 4px rgba(92, 36, 6, 0.15));
+}
+.brand-info h1 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--chocolate);
+  letter-spacing: -0.01em;
+  line-height: 1.1;
+}
+.brand-info span {
+  font-size: 11px;
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  color: var(--marrom-medio);
+  font-weight: 600;
+}
+
+nav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+nav a, nav button {
+  background: transparent;
+  border: 1px solid transparent;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--marrom-medio);
+  cursor: pointer;
+  transition: var(--transicao);
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  text-decoration: none;
+}
+nav a:hover, nav button:hover {
+  color: var(--chocolate);
+  background: rgba(92, 36, 6, 0.05);
+}
+nav a.active, nav button[aria-current="page"] {
+  background: var(--chocolate);
+  color: var(--bg-surface);
+  border-color: var(--chocolate);
+}
+.nav-badge {
+  background: var(--mel);
+  color: white;
+  border-radius: 12px;
+  padding: 2px 7px;
+  font-size: 11px;
+  font-weight: 700;
+}
+
+/* Container Principal */
+main {
+  max-width: 1180px;
+  margin: 32px auto 60px;
+  padding: 0 20px;
+}
+.page-container {
+  animation: fadeIn 0.35s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* Banner Editorial Hero */
+.hero-banner {
+  background: linear-gradient(135deg, #fffdfa 0%, #faede0 100%);
+  border: 1px solid var(--borda);
+  border-radius: var(--radius-lg);
+  padding: 36px 40px;
+  margin-bottom: 36px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: var(--sombra-card);
+  position: relative;
+  overflow: hidden;
+}
+.hero-banner::after {
+  content: '🧁';
+  position: absolute;
+  right: 20px;
+  bottom: -15px;
+  font-size: 120px;
+  opacity: 0.12;
+  pointer-events: none;
+}
+.hero-content {
+  max-width: 640px;
+}
+.hero-tag {
+  font-size: 12px;
+  text-transform: uppercase;
+  letter-spacing: 0.14em;
+  color: var(--mel);
+  font-weight: 700;
+  margin-bottom: 8px;
+  display: block;
+}
+.hero-content h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: clamp(24px, 3.5vw, 36px);
+  color: var(--chocolate);
+  font-weight: 700;
+  line-height: 1.2;
+  margin-bottom: 12px;
+}
+.hero-content p {
+  font-size: 15px;
+  color: var(--marrom-medio);
+  margin-bottom: 20px;
+  line-height: 1.6;
+}
+.hero-badges {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.badge-pill {
+  background: rgba(214, 132, 36, 0.12);
+  color: var(--chocolate);
+  padding: 6px 14px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  border: 1px solid rgba(214, 132, 36, 0.25);
+}
+
+/* Títulos de Seção */
+.section-title {
+  margin-bottom: 24px;
+}
+.section-title h2 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 26px;
+  color: var(--chocolate);
+  font-weight: 700;
+  letter-spacing: -0.01em;
+}
+.section-title p {
+  color: var(--marrom-medio);
+  font-size: 14px;
+}
+
+/* Grid de Produtos / Cards de Cupcakes */
+.grid-cupcakes {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+  gap: 24px;
+}
+.card-cupcake {
+  background: var(--bg-card);
+  border: 1px solid var(--borda);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  box-shadow: var(--sombra-card);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: var(--transicao);
+}
+.card-cupcake:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--sombra-hover);
+  border-color: rgba(92, 36, 6, 0.24);
+}
+.card-icon {
+  font-size: 44px;
+  margin-bottom: 12px;
+  display: inline-block;
+  filter: drop-shadow(0 4px 6px rgba(0,0,0,0.06));
+}
+.card-cupcake h3 {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--chocolate);
+  margin-bottom: 8px;
+}
+.card-desc {
+  font-size: 13.5px;
+  color: var(--marrom-medio);
+  line-height: 1.55;
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+.card-footer {
+  border-top: 1px dashed var(--borda);
+  padding-top: 16px;
+}
+.price-tag {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  margin-bottom: 14px;
+}
+.price-value {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--chocolate);
+}
+.stock-tag {
+  font-size: 11px;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: var(--sucesso);
+  background: var(--sucesso-bg);
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+}
+.action-group {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.input-qtd {
+  width: 64px;
+  padding: 10px;
+  border: 1px solid var(--borda);
+  border-radius: var(--radius-sm);
+  text-align: center;
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  background: var(--bg-surface);
+  color: var(--chocolate);
+}
+.input-qtd:focus {
+  outline: none;
+  border-color: var(--borda-foco);
+  box-shadow: 0 0 0 3px rgba(214, 132, 36, 0.15);
+}
+
+/* Botões Elegantes */
+.btn {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 11px 22px;
+  border-radius: var(--radius-pill);
+  border: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  transition: var(--transicao);
+  text-decoration: none;
+}
+.btn-mel {
+  background: var(--mel);
+  color: white;
+  box-shadow: 0 4px 12px rgba(214, 132, 36, 0.25);
+}
+.btn-mel:hover {
+  background: var(--mel-hover);
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(214, 132, 36, 0.35);
+}
+.btn-chocolate {
+  background: var(--chocolate);
+  color: var(--bg-surface);
+}
+.btn-chocolate:hover {
+  background: var(--chocolate-dark);
+  transform: translateY(-2px);
+}
+.btn-outline {
+  background: transparent;
+  border: 1px solid var(--marrom-suave);
+  color: var(--chocolate);
+}
+.btn-outline:hover {
+  background: rgba(92, 36, 6, 0.05);
+  border-color: var(--chocolate);
+}
+.btn-danger {
+  background: #fde8e8;
+  color: var(--alerta-erro);
+  padding: 6px 14px;
+  font-size: 12px;
+  border-radius: var(--radius-pill);
+}
+.btn-danger:hover {
+  background: var(--alerta-erro);
+  color: white;
+}
+
+/* Tabelas e Carrinho */
+.table-container {
+  background: var(--bg-card);
+  border: 1px solid var(--borda);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  box-shadow: var(--sombra-card);
+  margin-bottom: 24px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+th {
+  background: var(--bg-surface);
+  color: var(--chocolate);
+  font-family: 'Playfair Display', Georgia, serif;
+  font-weight: 600;
+  font-size: 15px;
+  padding: 14px 18px;
+  border-bottom: 1px solid var(--borda);
+}
+td {
+  padding: 16px 18px;
+  border-bottom: 1px solid var(--borda);
+  font-size: 14px;
+  color: var(--chocolate);
+}
+tr:last-child td {
+  border-bottom: none;
+}
+
+/* Cards de Resumo e Checkout */
+.summary-card {
+  background: var(--bg-card);
+  border: 1px solid var(--borda);
+  border-radius: var(--radius-md);
+  padding: 24px;
+  max-width: 460px;
+  margin-left: auto;
+  box-shadow: var(--sombra-card);
+}
+.summary-row {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  font-size: 14.5px;
+  color: var(--marrom-medio);
+}
+.summary-row strong {
+  color: var(--chocolate);
+}
+.summary-row.total {
+  font-family: 'Playfair Display', Georgia, serif;
+  font-size: 20px;
+  font-weight: 700;
+  color: var(--chocolate);
+  border-top: 2px dashed var(--borda);
+  padding-top: 14px;
+  margin-top: 14px;
+}
+
+/* Mensagens e Alertas Flash */
+.alert-box {
+  padding: 14px 18px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 20px;
+  font-size: 14px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+.alert-info {
+  background: #fff8e8;
+  border: 1px solid #fae1af;
+  color: #7c4a03;
+}
+.alert-sucesso {
+  background: var(--sucesso-bg);
+  border: 1px solid #c8e6c9;
+  color: var(--sucesso);
+}
+.alert-erro {
+  background: var(--alerta-bg);
+  border: 1px solid #ffcdd2;
+  color: var(--alerta-erro);
+}
+
+/* Formulários */
+.form-group {
+  margin-bottom: 16px;
+}
+.form-group label {
+  display: block;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--chocolate);
+  margin-bottom: 6px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+.form-control {
+  width: 100%;
+  padding: 12px 14px;
+  border: 1px solid var(--borda);
+  border-radius: var(--radius-sm);
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-size: 14px;
+  background: var(--bg-surface);
+  color: var(--chocolate);
+  transition: var(--transicao);
+}
+.form-control:focus {
+  outline: none;
+  background: white;
+  border-color: var(--borda-foco);
+  box-shadow: 0 0 0 3px rgba(214, 132, 36, 0.15);
+}
+
+/* Rastreio e Timeline */
+.timeline-container {
+  background: white;
+  border: 1px solid var(--borda);
+  border-radius: var(--radius-md);
+  padding: 32px 28px;
+  box-shadow: var(--sombra-card);
+  max-width: 820px;
+  margin: 0 auto;
+}
+.timeline-steps {
+  display: flex;
+  justify-content: space-between;
+  position: relative;
+  margin: 36px 0 28px;
+}
+.timeline-steps::before {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 10%;
+  right: 10%;
+  height: 3px;
+  background: #e8d9cc;
+  transform: translateY(-50%);
+  z-index: 1;
+}
+.step-item {
+  position: relative;
+  z-index: 2;
+  background: var(--bg-surface);
+  border: 2px solid #d4c2b2;
+  padding: 8px 16px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--marrom-medio);
+  transition: var(--transicao);
+}
+.step-item.active {
+  background: #fff8e8;
+  border-color: var(--mel);
+  color: var(--chocolate);
+  box-shadow: 0 4px 12px rgba(214, 132, 36, 0.20);
+}
+.step-item.completed {
+  background: var(--chocolate);
+  border-color: var(--chocolate);
+  color: white;
+}
+
+/* Rodapé */
+footer {
+  background: var(--chocolate);
+  color: #f7ede2;
+  padding: 40px 24px 30px;
+  margin-top: 80px;
+  border-top: 4px solid var(--mel);
+}
+.footer-inner {
+  max-width: 1180px;
+  margin: 0 auto;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  gap: 20px;
+  font-size: 13.5px;
+}
+.footer-note {
+  font-size: 12px;
+  opacity: 0.75;
+}
+
+
+/* Imagem e Mídia nos Cards de Cupcakes */
+.card-img-wrap {
+  width: 100%;
+  height: 200px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  margin-bottom: 16px;
+  position: relative;
+  background: #f5ebe1;
+}
+.card-img-wrap img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+}
+.card-cupcake:hover .card-img-wrap img {
+  transform: scale(1.06);
+}
+.card-tag-floating {
+  position: absolute;
+  top: 12px;
+  right: 12px;
+  background: rgba(92, 36, 6, 0.85);
+  backdrop-filter: blur(4px);
+  color: #fffaf2;
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  padding: 4px 10px;
+  border-radius: var(--radius-pill);
+}
+
+/* User Profile Chip na Topbar/Header */
+.user-chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: #fdf5eb;
+  border: 1px solid rgba(214, 132, 36, 0.35);
+  padding: 5px 14px 5px 8px;
+  border-radius: var(--radius-pill);
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--chocolate);
+}
+.user-avatar-circle {
+  width: 28px;
+  height: 28px;
+  background: var(--chocolate);
+  color: var(--bg-surface);
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 13px;
+  font-weight: 700;
+}
+.user-name-text {
+  max-width: 140px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.btn-chip-action {
+  color: var(--marrom-medio);
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 3px 8px;
+  border-radius: var(--radius-pill);
+  transition: var(--transicao);
+}
+.btn-chip-action:hover {
+  background: rgba(92, 36, 6, 0.08);
+  color: var(--chocolate);
+}
+.btn-chip-logout {
+  color: var(--alerta-erro);
+}
+.btn-chip-logout:hover {
+  background: var(--alerta-bg);
+  color: var(--alerta-erro);
+}

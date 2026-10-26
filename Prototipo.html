@@ -1,0 +1,1297 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Sweet Cupcake Gourmet — Confeitaria Artesanal</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #faf1e6;
+      --bg-surface: #fffaf2;
+      --bg-card: #ffffff;
+      --chocolate: #5c2406;
+      --chocolate-dark: #3f1702;
+      --mel: #d68424;
+      --mel-hover: #bd701a;
+      --marrom-medio: #8c4c27;
+      --marrom-suave: #b57a55;
+      --borda: rgba(92, 36, 6, 0.12);
+      --borda-foco: #d68424;
+      --sombra-card: 0 10px 30px -10px rgba(92, 36, 6, 0.12);
+      --sombra-hover: 0 16px 40px -12px rgba(92, 36, 6, 0.20);
+      --sucesso: #2e7d32;
+      --sucesso-bg: #edf7ed;
+      --alerta-erro: #c62828;
+      --alerta-bg: #fde8e8;
+      --radius-sm: 8px;
+      --radius-md: 16px;
+      --radius-lg: 24px;
+      --radius-pill: 100px;
+      --transicao: all 0.25s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--chocolate);
+      line-height: 1.6;
+    }
+    .topbar-aviso {
+      background: var(--chocolate);
+      color: var(--bg-base);
+      font-size: 13px;
+      padding: 8px 16px;
+      text-align: center;
+      font-weight: 500;
+    }
+    .topbar-aviso strong { color: #f7d294; }
+    header {
+      background: rgba(255, 250, 242, 0.95);
+      backdrop-filter: blur(10px);
+      border-bottom: 1px solid var(--borda);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(92, 36, 6, 0.04);
+    }
+    .header-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 14px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      text-decoration: none;
+      color: inherit;
+    }
+    .brand-logo { font-size: 32px; }
+    .brand-info h1 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 24px;
+      font-weight: 700;
+      color: var(--chocolate);
+      line-height: 1.1;
+    }
+    .brand-info span {
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      color: var(--marrom-medio);
+      font-weight: 600;
+    }
+    nav {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    nav button {
+      background: transparent;
+      border: 1px solid transparent;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 13.5px;
+      font-weight: 600;
+      color: var(--marrom-medio);
+      cursor: pointer;
+      transition: var(--transicao);
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+    }
+    nav button:hover {
+      color: var(--chocolate);
+      background: rgba(92, 36, 6, 0.05);
+    }
+    nav button[aria-current="page"] {
+      background: var(--chocolate);
+      color: var(--bg-surface);
+      border-color: var(--chocolate);
+    }
+    .nav-badge {
+      background: var(--mel);
+      color: white;
+      border-radius: 12px;
+      padding: 2px 7px;
+      font-size: 11px;
+      font-weight: 700;
+    }
+
+    /* User Profile Chip na Topbar */
+    .user-chip {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      background: #fdf5eb;
+      border: 1px solid rgba(214, 132, 36, 0.4);
+      padding: 5px 14px 5px 8px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--chocolate);
+    }
+    .user-avatar-circle {
+      width: 28px;
+      height: 28px;
+      background: var(--chocolate);
+      color: var(--bg-surface);
+      border-radius: 50%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 13px;
+    }
+    .btn-chip-action {
+      background: none;
+      border: none;
+      color: var(--marrom-medio);
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 2px 6px;
+      border-radius: var(--radius-pill);
+    }
+    .btn-chip-action:hover {
+      background: rgba(92, 36, 6, 0.08);
+      color: var(--chocolate);
+    }
+    .btn-chip-logout {
+      color: var(--alerta-erro);
+    }
+    .btn-chip-logout:hover {
+      background: var(--alerta-bg);
+      color: var(--alerta-erro);
+    }
+
+    main {
+      max-width: 1180px;
+      margin: 32px auto 60px;
+      padding: 0 20px;
+    }
+    section { animation: fadeIn 0.35s ease; }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero-banner {
+      background: linear-gradient(135deg, #fffdfa 0%, #faede0 100%);
+      border: 1px solid var(--borda);
+      border-radius: var(--radius-lg);
+      padding: 36px 40px;
+      margin-bottom: 36px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: var(--sombra-card);
+      position: relative;
+      overflow: hidden;
+    }
+    .hero-banner::after {
+      content: '🧁';
+      position: absolute;
+      right: 20px;
+      bottom: -15px;
+      font-size: 120px;
+      opacity: 0.12;
+      pointer-events: none;
+    }
+    .hero-content { max-width: 640px; }
+    .hero-tag {
+      font-size: 12px;
+      text-transform: uppercase;
+      letter-spacing: 0.14em;
+      color: var(--mel);
+      font-weight: 700;
+      margin-bottom: 8px;
+      display: block;
+    }
+    .hero-content h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: clamp(24px, 3.5vw, 36px);
+      color: var(--chocolate);
+      font-weight: 700;
+      line-height: 1.2;
+      margin-bottom: 12px;
+    }
+    .hero-content p {
+      font-size: 15px;
+      color: var(--marrom-medio);
+      margin-bottom: 20px;
+    }
+    .badge-pill {
+      background: rgba(214, 132, 36, 0.12);
+      color: var(--chocolate);
+      padding: 6px 14px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      border: 1px solid rgba(214, 132, 36, 0.25);
+    }
+    .section-title { margin-bottom: 24px; }
+    .section-title h2 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 26px;
+      color: var(--chocolate);
+      font-weight: 700;
+    }
+    .section-title p { color: var(--marrom-medio); font-size: 14px; }
+
+    /* Grid e Cards com Fotos Reais */
+    .grid-cupcakes {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(290px, 1fr));
+      gap: 24px;
+    }
+    .card-cupcake {
+      background: var(--bg-card);
+      border: 1px solid var(--borda);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      box-shadow: var(--sombra-card);
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      transition: var(--transicao);
+    }
+    .card-cupcake:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--sombra-hover);
+      border-color: rgba(92, 36, 6, 0.24);
+    }
+    .card-img-wrap {
+      width: 100%;
+      height: 200px;
+      border-radius: var(--radius-sm);
+      overflow: hidden;
+      margin-bottom: 16px;
+      position: relative;
+      background: #f5ebe1;
+    }
+    .card-img-wrap img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s cubic-bezier(0.22, 0.61, 0.36, 1);
+    }
+    .card-cupcake:hover .card-img-wrap img {
+      transform: scale(1.06);
+    }
+    .card-tag-floating {
+      position: absolute;
+      top: 12px;
+      right: 12px;
+      background: rgba(92, 36, 6, 0.85);
+      backdrop-filter: blur(4px);
+      color: #fffaf2;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      padding: 4px 10px;
+      border-radius: var(--radius-pill);
+    }
+    .card-cupcake h3 {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--chocolate);
+      margin-bottom: 8px;
+    }
+    .card-desc {
+      font-size: 13.5px;
+      color: var(--marrom-medio);
+      line-height: 1.55;
+      margin-bottom: 20px;
+      flex-grow: 1;
+    }
+    .card-footer {
+      border-top: 1px dashed var(--borda);
+      padding-top: 16px;
+    }
+    .price-tag {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      margin-bottom: 14px;
+    }
+    .price-value {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 22px;
+      font-weight: 700;
+      color: var(--chocolate);
+    }
+    .stock-tag {
+      font-size: 11px;
+      font-weight: 600;
+      text-transform: uppercase;
+      color: var(--sucesso);
+      background: var(--sucesso-bg);
+      padding: 3px 8px;
+      border-radius: var(--radius-pill);
+    }
+    .action-group {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .input-qtd {
+      width: 64px;
+      padding: 10px;
+      border: 1px solid var(--borda);
+      border-radius: var(--radius-sm);
+      text-align: center;
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      background: var(--bg-surface);
+      color: var(--chocolate);
+    }
+    .input-qtd:focus {
+      outline: none;
+      border-color: var(--borda-foco);
+      box-shadow: 0 0 0 3px rgba(214, 132, 36, 0.15);
+    }
+    .btn {
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      padding: 11px 22px;
+      border-radius: var(--radius-pill);
+      border: none;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: var(--transicao);
+      text-decoration: none;
+    }
+    .btn-mel {
+      background: var(--mel);
+      color: white;
+      box-shadow: 0 4px 12px rgba(214, 132, 36, 0.25);
+    }
+    .btn-mel:hover {
+      background: var(--mel-hover);
+      transform: translateY(-2px);
+    }
+    .btn-chocolate { background: var(--chocolate); color: var(--bg-surface); }
+    .btn-chocolate:hover { background: var(--chocolate-dark); transform: translateY(-2px); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--marrom-suave);
+      color: var(--chocolate);
+    }
+    .btn-outline:hover { background: rgba(92, 36, 6, 0.05); }
+    .btn-danger {
+      background: #fde8e8;
+      color: var(--alerta-erro);
+      padding: 6px 14px;
+      font-size: 12px;
+      border-radius: var(--radius-pill);
+    }
+    .btn-danger:hover { background: var(--alerta-erro); color: white; }
+
+    .table-container {
+      background: var(--bg-card);
+      border: 1px solid var(--borda);
+      border-radius: var(--radius-md);
+      overflow: hidden;
+      box-shadow: var(--sombra-card);
+      margin-bottom: 24px;
+    }
+    table { width: 100%; border-collapse: collapse; text-align: left; }
+    th {
+      background: var(--bg-surface);
+      color: var(--chocolate);
+      font-family: 'Playfair Display', Georgia, serif;
+      font-weight: 600;
+      font-size: 15px;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--borda);
+    }
+    td { padding: 16px 18px; border-bottom: 1px solid var(--borda); font-size: 14px; }
+    tr:last-child td { border-bottom: none; }
+    .summary-card {
+      background: var(--bg-card);
+      border: 1px solid var(--borda);
+      border-radius: var(--radius-md);
+      padding: 24px;
+      max-width: 460px;
+      margin-left: auto;
+      box-shadow: var(--sombra-card);
+    }
+    .summary-row {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      font-size: 14.5px;
+      color: var(--marrom-medio);
+    }
+    .summary-row.total {
+      font-family: 'Playfair Display', Georgia, serif;
+      font-size: 20px;
+      font-weight: 700;
+      color: var(--chocolate);
+      border-top: 2px dashed var(--borda);
+      padding-top: 14px;
+      margin-top: 14px;
+    }
+    .alert-box {
+      padding: 14px 18px;
+      border-radius: var(--radius-sm);
+      margin-bottom: 18px;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .alert-info { background: #fff8e8; border: 1px solid #fae1af; color: #7c4a03; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label {
+      display: block;
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--chocolate);
+      margin-bottom: 6px;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+    .form-control {
+      width: 100%;
+      padding: 12px 14px;
+      border: 1px solid var(--borda);
+      border-radius: var(--radius-sm);
+      font-family: 'Plus Jakarta Sans', sans-serif;
+      font-size: 14px;
+      background: var(--bg-surface);
+      color: var(--chocolate);
+    }
+    .form-control:focus {
+      outline: none;
+      background: white;
+      border-color: var(--borda-foco);
+      box-shadow: 0 0 0 3px rgba(214, 132, 36, 0.15);
+    }
+    .timeline-container {
+      background: white;
+      border: 1px solid var(--borda);
+      border-radius: var(--radius-md);
+      padding: 32px 28px;
+      box-shadow: var(--sombra-card);
+      max-width: 820px;
+      margin: 0 auto;
+    }
+    .timeline-steps {
+      display: flex;
+      justify-content: space-between;
+      position: relative;
+      margin: 36px 0 28px;
+    }
+    .timeline-steps::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 10%;
+      right: 10%;
+      height: 3px;
+      background: #e8d9cc;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+    .step-item {
+      position: relative;
+      z-index: 2;
+      background: var(--bg-surface);
+      border: 2px solid #d4c2b2;
+      padding: 8px 16px;
+      border-radius: var(--radius-pill);
+      font-size: 13px;
+      font-weight: 600;
+      color: var(--marrom-medio);
+    }
+    .step-item.active {
+      background: #fff8e8;
+      border-color: var(--mel);
+      color: var(--chocolate);
+      box-shadow: 0 4px 12px rgba(214, 132, 36, 0.20);
+    }
+    .step-item.completed {
+      background: var(--chocolate);
+      border-color: var(--chocolate);
+      color: white;
+    }
+    footer {
+      background: var(--chocolate);
+      color: #f7ede2;
+      padding: 40px 24px 30px;
+      margin-top: 80px;
+      border-top: 4px solid var(--mel);
+    }
+    .footer-inner {
+      max-width: 1180px;
+      margin: 0 auto;
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      font-size: 13.5px;
+    }
+    .toast-msg {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--chocolate);
+      color: white;
+      padding: 14px 22px;
+      border-radius: var(--radius-pill);
+      box-shadow: 0 8px 24px rgba(0,0,0,0.2);
+      font-size: 14px;
+      font-weight: 600;
+      display: none;
+      z-index: 1000;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="topbar-aviso">
+    🛵 <strong>Entrega Expressa Local:</strong> Pedidos entregues de 15 a 30 minutos na região de proximidade • Taxa fixa de R$ 6,00.
+  </div>
+
+  <header>
+    <div class="header-inner">
+      <div class="brand">
+        <span class="brand-logo">🧁</span>
+        <div class="brand-info">
+          <h1>Sweet Cupcake</h1>
+          <span>Confeitaria Artesanal & Gourmet</span>
+        </div>
+      </div>
+      <nav aria-label="Navegação da loja">
+        <button data-tela="vitrine" aria-current="page">Vitrine</button>
+        <button data-tela="carrinho">Carrinho <span class="nav-badge" id="badge-qtd">0</span></button>
+        <button data-tela="checkout">Checkout</button>
+        <button data-tela="rastreio">Acompanhamento</button>
+        <button data-tela="operador">Área da Loja</button>
+
+        <!-- Área de Perfil do Usuário na Topbar -->
+        <div id="bloco-usuario-header">
+          <!-- Renderizado via JS conforme estado de login -->
+        </div>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- 1. VITRINE DE PRODUTOS -->
+    <section id="vitrine">
+      <div class="hero-banner">
+        <div class="hero-content">
+          <span class="hero-tag">Produção Diária & Ingredientes Nobres</span>
+          <h2>A arte do verdadeiro cupcake artesanal</h2>
+          <p>Massa aerada, recheios generosos e coberturas gourmet preparadas à mão todas as manhãs. Escolha seus sabores favoritos e receba ainda quentinho.</p>
+          <div class="hero-badges">
+            <span class="badge-pill">⏱ 15–30 min de entrega</span>
+            <span class="badge-pill">💳 PIX & Cartão de Crédito</span>
+            <span class="badge-pill">✨ Receitas Autorais</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-title">
+        <h2>Catálogo de Sabores Oficiais</h2>
+        <p>Selecione a quantidade desejada e adicione ao seu carrinho de compras.</p>
+      </div>
+
+      <div class="grid-cupcakes" id="vitrine-grid">
+        <!-- Renderizado dinamicamente via JS com fotos reais -->
+      </div>
+    </section>
+
+    <!-- 2. IDENTIFICAÇÃO E CADASTRO / PERFIL -->
+    <section id="conta" hidden>
+      <div id="view-perfil-logado" hidden>
+        <div class="section-title">
+          <h2>Meu Perfil de Cliente</h2>
+          <p>Gerencie seus dados e confira seus pedidos cadastrados.</p>
+        </div>
+        <div class="card-cupcake" style="max-width: 600px; margin: 0 auto;">
+          <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+            <div class="user-avatar-circle" style="width: 52px; height: 52px; font-size: 24px;">👤</div>
+            <div>
+              <h3 id="perfil-nome-exibicao">Cliente Demonstração</h3>
+              <span class="stock-tag">Cliente Verificado</span>
+            </div>
+          </div>
+          <div style="background: var(--bg-surface); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--borda); margin-bottom: 20px;">
+            <p style="font-size: 13.5px; margin-bottom: 8px;"><strong>E-mail:</strong> <span id="perfil-email-exibicao">cliente@exemplo.com</span></p>
+            <p style="font-size: 13.5px; margin-bottom: 8px;"><strong>Telefone:</strong> (11) 98765-4321</p>
+            <p style="font-size: 13.5px;"><strong>Endereço Padrão:</strong> Rua das Flores, 123 - Centro</p>
+          </div>
+          <div style="display: flex; gap: 10px;">
+            <button class="btn btn-mel" style="flex:1;" onclick="navegarPara('vitrine')">Ir à Vitrine</button>
+            <button class="btn btn-outline" style="color:var(--alerta-erro); border-color:var(--alerta-erro);" onclick="deslogarCliente()">Sair da Conta</button>
+          </div>
+        </div>
+      </div>
+
+      <div id="view-login-cadastro">
+        <div class="section-title">
+          <h2>Identificação do Cliente</h2>
+          <p>Acesse com sua conta para acompanhar seus pedidos ou cadastre-se em instantes.</p>
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+          <!-- Login -->
+          <div class="card-cupcake">
+            <h3>Já possui uma conta?</h3>
+            <p class="card-desc">Entre com seu e-mail e senha cadastrados.</p>
+            <div class="form-group">
+              <label>E-mail</label>
+              <input type="email" id="login-email" class="form-control" placeholder="cliente@exemplo.com">
+            </div>
+            <div class="form-group">
+              <label>Senha</label>
+              <input type="password" id="login-senha" class="form-control" placeholder="••••••••">
+            </div>
+            <button class="btn btn-chocolate" style="width: 100%;" onclick="executarLogin()">Acessar Minha Conta</button>
+            <div style="margin-top: 14px; font-size: 12px; color: var(--marrom-medio); background: var(--bg-surface); padding: 8px 12px; border-radius: 4px;">
+              💡 Dica de teste: <code>cliente@exemplo.com</code> com senha <code>demo123</code>.
+            </div>
+          </div>
+
+          <!-- Cadastro -->
+          <div class="card-cupcake">
+            <h3>Primeira vez na loja? Cadastre-se</h3>
+            <p class="card-desc">Leva menos de 1 minuto para preencher seus dados.</p>
+            <div class="form-group">
+              <label>Nome Completo</label>
+              <input type="text" id="cad-nome" class="form-control" placeholder="Seu nome">
+            </div>
+            <div class="form-group">
+              <label>E-mail</label>
+              <input type="email" id="cad-email" class="form-control" placeholder="seu@email.com">
+            </div>
+            <div class="form-group">
+              <label>Telefone / WhatsApp</label>
+              <input type="text" id="cad-tel" class="form-control" placeholder="(11) 98765-4321">
+            </div>
+            <div class="form-group">
+              <label>Senha de Acesso</label>
+              <input type="password" id="cad-senha" class="form-control" placeholder="Mínimo 6 caracteres">
+            </div>
+            <button class="btn btn-mel" style="width: 100%;" onclick="executarCadastro()">Criar Meu Cadastro ➔</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 3. CARRINHO DE COMPRAS -->
+    <section id="carrinho" hidden>
+      <div class="section-title">
+        <h2>Seu Carrinho de Compras</h2>
+        <p>Revise as quantidades e valores dos itens antes de seguir para a entrega.</p>
+      </div>
+
+      <div id="carrinho-vazio-aviso" class="alert-box alert-info">
+        🧁 Seu carrinho ainda está vazio. Visite a <a href="#" onclick="navegarPara('vitrine')" style="color:inherit; font-weight:700; margin-left:4px;">Vitrine</a> para escolher seus cupcakes artesanais!
+      </div>
+
+      <div id="carrinho-corpo" hidden>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Sabor do Cupcake</th>
+                <th>Preço Unitário</th>
+                <th style="width: 140px;">Quantidade</th>
+                <th>Subtotal</th>
+                <th style="width: 90px; text-align: center;">Ações</th>
+              </tr>
+            </thead>
+            <tbody id="carrinho-tbody"></tbody>
+          </table>
+        </div>
+
+        <div class="summary-card">
+          <div class="summary-row">
+            <span>Subtotal dos cupcakes:</span>
+            <strong id="carrinho-subtotal">R$ 0,00</strong>
+          </div>
+          <div class="summary-row">
+            <span>Taxa de entrega local (15–30 min):</span>
+            <strong>R$ 6,00</strong>
+          </div>
+          <div class="summary-row total">
+            <span>Total da Compra:</span>
+            <span id="carrinho-total">R$ 0,00</span>
+          </div>
+          <div style="margin-top: 20px; display: flex; gap: 12px;">
+            <button class="btn btn-outline" onclick="navegarPara('vitrine')">Continuar Comprando</button>
+            <button class="btn btn-mel" style="flex: 1;" onclick="navegarPara('checkout')">Avançar para Checkout ➔</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 4. CHECKOUT E PAGAMENTO -->
+    <section id="checkout" hidden>
+      <div class="section-title">
+        <h2>Finalização do Pedido</h2>
+        <p>Informe o endereço de entrega e selecione a forma de pagamento.</p>
+      </div>
+
+      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+        <div class="card-cupcake">
+          <h3>1. Endereço para Entrega</h3>
+          <p class="card-desc">Entrega rápida na sua região em 15 a 30 minutos.</p>
+          <div class="form-group">
+            <label>Destinatário</label>
+            <input type="text" id="chk-nome" class="form-control" value="Cliente Demonstração">
+          </div>
+          <div class="form-group">
+            <label>Rua, Número e Bairro</label>
+            <input type="text" id="chk-rua" class="form-control" placeholder="Ex: Rua das Flores, 123 - Centro">
+          </div>
+          <div class="form-group">
+            <label>Complemento</label>
+            <input type="text" id="chk-comp" class="form-control" placeholder="Apto 42, Bloco B">
+          </div>
+          <div class="alert-box alert-info" style="margin-top: 14px; margin-bottom: 0;">
+            📍 <strong>Região de Proximidade:</strong> Frete fixo de R$ 6,00 garantido para o seu bairro.
+          </div>
+        </div>
+
+        <div class="card-cupcake">
+          <h3>2. Meio de Pagamento</h3>
+          <p class="card-desc">Escolha como prefere pagar seu pedido demonstrativo.</p>
+
+          <div style="margin-bottom: 18px; display: flex; flex-direction: column; gap: 10px;">
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; padding: 10px; border: 1px solid var(--borda); border-radius: var(--radius-sm); background: var(--bg-surface);">
+              <input type="radio" name="forma-pgto" value="PIX" checked onchange="trocarMetodoPgto()">
+              <span>⚡ PIX (Confirmação Imediata via QR Code)</span>
+            </label>
+            <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; padding: 10px; border: 1px solid var(--borda); border-radius: var(--radius-sm); background: var(--bg-surface);">
+              <input type="radio" name="forma-pgto" value="CARTAO" onchange="trocarMetodoPgto()">
+              <span>💳 Cartão de Crédito (Simulação de Autorização)</span>
+            </label>
+          </div>
+
+          <div id="pgto-pix-bloco" style="background: #fdf6ec; border: 1px solid #fae1af; border-radius: var(--radius-sm); padding: 16px;">
+            <p style="font-size: 13px; font-weight: 600; color: var(--chocolate); margin-bottom: 8px;">Chave PIX Copia e Cola (Demonstrativa):</p>
+            <input type="text" readonly value="00020126580014br.gov.bcb.pix0136sweetcupcake-gourmet-pit2" class="form-control" style="font-family: monospace; font-size: 11px; background: white;">
+            <p style="font-size: 12px; color: var(--marrom-medio); margin-top: 6px;">Ao clicar no botão de confirmação, a aprovação do PIX é simulada instantaneamente.</p>
+          </div>
+
+          <div id="pgto-cartao-bloco" hidden style="background: var(--bg-surface); border: 1px solid var(--borda); border-radius: var(--radius-sm); padding: 16px;">
+            <div class="form-group">
+              <label>Número do Cartão</label>
+              <input type="text" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19">
+            </div>
+            <div style="display: flex; gap: 10px;">
+              <div class="form-group" style="flex: 1;">
+                <label>Validade</label>
+                <input type="text" class="form-control" placeholder="MM/AA" maxlength="5">
+              </div>
+              <div class="form-group" style="flex: 1;">
+                <label>CVV</label>
+                <input type="text" class="form-control" placeholder="123" maxlength="3">
+              </div>
+            </div>
+          </div>
+
+          <div style="margin-top: 20px; border-top: 1px dashed var(--borda); padding-top: 16px;">
+            <div class="summary-row total" style="border:none; margin:0 0 16px 0; padding:0;">
+              <span>Total com Frete:</span>
+              <span id="chk-total-valor">R$ 0,00</span>
+            </div>
+            <button class="btn btn-mel" style="width: 100%; font-size: 15px;" onclick="finalizarPedido()">Confirmar e Efetuar Pagamento ➔</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 5. ACOMPANHAMENTO DO PEDIDO -->
+    <section id="rastreio" hidden>
+      <div class="section-title" style="text-align: center;">
+        <h2>Acompanhamento da Entrega</h2>
+        <p>Acompanhe em tempo real o status de produção e deslocamento do seu pedido.</p>
+      </div>
+
+      <div class="timeline-container">
+        <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--borda); padding-bottom: 14px;">
+          <div>
+            <h3 style="font-family:'Playfair Display', Georgia, serif; font-size: 22px; color: var(--chocolate);" id="rastreio-id">Pedido #1001</h3>
+            <p style="font-size: 13px; color: var(--marrom-medio);" id="rastreio-data">Data: Hoje • Entrega prevista em 15–30 min</p>
+          </div>
+          <span class="stock-tag" style="background:#e8f5e9; color:#2e7d32; font-size:12px; padding:6px 12px;">Pagamento Aprovado</span>
+        </div>
+
+        <div class="timeline-steps">
+          <div class="step-item completed" id="step-1">1. Recebido</div>
+          <div class="step-item active" id="step-2">2. Em Preparo</div>
+          <div class="step-item" id="step-3">3. Em Rota</div>
+          <div class="step-item" id="step-4">4. Entregue</div>
+        </div>
+
+        <div class="alert-box alert-info" id="rastreio-mensagem-status">
+          🧁 <strong>Na cozinha:</strong> Seus cupcakes estão sendo finalizados artesanalmente com ingredientes frescos.
+        </div>
+
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-top: 20px; font-size: 14px; background: var(--bg-surface); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--borda);">
+          <div>
+            <p style="color: var(--marrom-medio); font-size: 12px; text-transform: uppercase; font-weight: 600;">Destino</p>
+            <p><strong id="rastreio-end-texto">Rua das Flores, 123</strong></p>
+          </div>
+          <div>
+            <p style="color: var(--marrom-medio); font-size: 12px; text-transform: uppercase; font-weight: 600;">Forma de Pagamento</p>
+            <p><strong id="rastreio-forma-texto">PIX</strong></p>
+          </div>
+          <div>
+            <p style="color: var(--marrom-medio); font-size: 12px; text-transform: uppercase; font-weight: 600;">Valor Total</p>
+            <p><strong id="rastreio-valor-texto">R$ 34,00</strong></p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 6. ÁREA OPERACIONAL DA LOJA -->
+    <section id="operador" hidden>
+      <div class="section-title">
+        <h2>Painel do Operador da Loja</h2>
+        <p>Módulo restrito para consulta dos pedidos e avanço de status de entrega (HU15 / UC06).</p>
+      </div>
+
+      <div class="card-cupcake">
+        <h3>Fila de Pedidos em Aberto</h3>
+        <p class="card-desc">Gerencie os pedidos recebidos e atualize o cliente em tempo real.</p>
+        <div class="table-container" style="margin-top: 14px;">
+          <table>
+            <thead>
+              <tr>
+                <th>Nº Pedido</th>
+                <th>Cliente</th>
+                <th>Endereço</th>
+                <th>Total</th>
+                <th>Status Atual</th>
+                <th>Ação Operacional</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td><strong id="op-pedido-num">#1001</strong></td>
+                <td id="op-cliente-nome">Cliente Demonstração</td>
+                <td id="op-endereco-texto">Rua das Flores, 123</td>
+                <td id="op-total-texto">R$ 34,00</td>
+                <td><span class="stock-tag" id="op-status-tag" style="background:#fff3e0; color:#e65100;">Em Preparo</span></td>
+                <td>
+                  <button class="btn btn-chocolate" style="font-size: 12px; padding: 6px 14px;" onclick="progredirStatusOperador()">Avançar Status ➔</button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div>
+        <p><strong>Sweet Cupcake Gourmet</strong> — Confeitaria Artesanal</p>
+        <p class="footer-note">Projeto Integrador Transdisciplinar em Engenharia de Software II (Turma_001)</p>
+      </div>
+      <div>
+        <p class="footer-note">Direção Visual: Design Jhol Confeitaria Editorial • Padrão Arquitetural MVC</p>
+      </div>
+    </div>
+  </footer>
+
+  <div id="toast" class="toast-msg"></div>
+
+  <script>
+    // 1. CATÁLOGO COM FOTOS REAIS DOS 5 SABORES
+    const CATALOGO = [
+      {
+        id: 1,
+        nome: "Chocolate",
+        desc: "Massa fofinha de cacau nobre 100%, recheio cremoso de ganache meio amargo e cobertura de brigadeiro tradicional com granulado belga.",
+        preco: 13.00,
+        img: "img/chocolate.jpg"
+      },
+      {
+        id: 2,
+        nome: "Ninho com Brigadeiro",
+        desc: "Massa amanteigada de baunilha, recheio generoso de leite Ninho cremoso e cobertura dupla com brigadeiro tradicional e Ninho.",
+        preco: 14.00,
+        img: "img/ninho-brigadeiro.jpg"
+      },
+      {
+        id: 3,
+        nome: "Ninho com Morango",
+        desc: "Massa leve de baunilha, recheio de geleia artesanal de morangos frescos e cobertura aveludada de mousse de leite Ninho.",
+        preco: 15.00,
+        img: "img/ninho-morango.jpg"
+      },
+      {
+        id: 4,
+        nome: "Nutella",
+        desc: "Massa de cacau nobre, recheio puro de creme de avelã Nutella e cobertura de brigadeiro de Nutella com avelãs tostadas picadas.",
+        preco: 16.00,
+        img: "img/nutella.jpg"
+      },
+      {
+        id: 5,
+        nome: "Doce de Leite",
+        desc: "Massa de especiarias suaves com canela, recheio e cobertura generosa de doce de leite caseiro cremoso polvilhado com canela.",
+        preco: 13.50,
+        img: "img/doce-de-leite.jpg"
+      }
+    ];
+
+    const TAXA_ENTREGA = 6.00;
+    let carrinho = {};
+    let usuarioLogado = null; // { nome, email }
+    let pedidoAtivo = {
+      id: 1001,
+      cliente: "Cliente Demonstração",
+      endereco: "Rua das Flores, 123 - Centro",
+      formaPgto: "PIX",
+      statusPgto: "CONFIRMADO",
+      statusEntrega: "PREPARANDO",
+      total: 34.00
+    };
+
+    // 2. ATUALIZAR TOPO COM PERFIL DO USUÁRIO
+    function atualizarHeaderUsuario() {
+      const bloco = document.getElementById("bloco-usuario-header");
+      if (usuarioLogado) {
+        bloco.innerHTML = `
+          <div class="user-chip">
+            <span class="user-avatar-circle">👤</span>
+            <span class="user-name-text">Olá, <strong>${usuarioLogado.nome}</strong></span>
+            <button class="btn-chip-action" onclick="navegarPara('conta')">Perfil</button>
+            <button class="btn-chip-action btn-chip-logout" onclick="deslogarCliente()">Sair</button>
+          </div>
+        `;
+        document.getElementById("view-perfil-logado").hidden = false;
+        document.getElementById("view-login-cadastro").hidden = true;
+        document.getElementById("perfil-nome-exibicao").textContent = usuarioLogado.nome;
+        document.getElementById("perfil-email-exibicao").textContent = usuarioLogado.email;
+        document.getElementById("chk-nome").value = usuarioLogado.nome;
+      } else {
+        bloco.innerHTML = `
+          <button onclick="navegarPara('conta')" style="background: rgba(214, 132, 36, 0.15); border: 1px solid var(--mel); color: var(--chocolate); padding: 7px 16px;">
+            👤 Entrar / Cadastrar
+          </button>
+        `;
+        document.getElementById("view-perfil-logado").hidden = true;
+        document.getElementById("view-login-cadastro").hidden = false;
+      }
+    }
+
+    // 3. RENDERIZAR VITRINE COM IMAGENS
+    function renderizarVitrine() {
+      const grid = document.getElementById("vitrine-grid");
+      grid.innerHTML = "";
+      CATALOGO.forEach(item => {
+        const card = document.createElement("div");
+        card.className = "card-cupcake";
+        card.innerHTML = `
+          <div>
+            <div class="card-img-wrap">
+              <img src="${item.img}" alt="Cupcake ${item.nome}" loading="lazy">
+              <span class="card-tag-floating">Gourmet</span>
+            </div>
+            <h3>${item.nome}</h3>
+            <p class="card-desc">${item.desc}</p>
+          </div>
+          <div class="card-footer">
+            <div class="price-tag">
+              <span class="price-value">R$ ${item.preco.toFixed(2).replace('.', ',')}</span>
+              <span class="stock-tag">Em estoque</span>
+            </div>
+            <div class="action-group">
+              <input type="number" id="qtd-prod-${item.id}" class="input-qtd" min="1" step="1" value="1">
+              <button class="btn btn-mel" style="flex:1;" onclick="adicionarAoCarrinho(${item.id})">Adicionar</button>
+            </div>
+          </div>
+        `;
+        grid.appendChild(card);
+      });
+    }
+
+    function adicionarAoCarrinho(id) {
+      const input = document.getElementById(`qtd-prod-${id}`);
+      const qtd = parseInt(input.value);
+      if (!Number.isInteger(qtd) || qtd <= 0) {
+        mostrarToast("Informe uma quantidade válida maior que zero.");
+        return;
+      }
+      carrinho[id] = (carrinho[id] || 0) + qtd;
+      atualizarBadge();
+      mostrarToast(`Adicionado ao carrinho com sucesso!`);
+    }
+
+    function atualizarBadge() {
+      const totalItens = Object.values(carrinho).reduce((acc, val) => acc + val, 0);
+      document.getElementById("badge-qtd").textContent = totalItens;
+    }
+
+    function renderizarCarrinho() {
+      const tbody = document.getElementById("carrinho-tbody");
+      const avisoVazio = document.getElementById("carrinho-vazio-aviso");
+      const corpo = document.getElementById("carrinho-corpo");
+      tbody.innerHTML = "";
+
+      const ids = Object.keys(carrinho).filter(id => carrinho[id] > 0);
+      if (ids.length === 0) {
+        avisoVazio.hidden = false;
+        corpo.hidden = true;
+        return;
+      }
+
+      avisoVazio.hidden = true;
+      corpo.hidden = false;
+
+      let subtotal = 0;
+      ids.forEach(id => {
+        const prod = CATALOGO.find(p => p.id === parseInt(id));
+        const qtd = carrinho[id];
+        const sub = prod.preco * qtd;
+        subtotal += sub;
+
+        const tr = document.createElement("tr");
+        tr.innerHTML = `
+          <td><strong>${prod.nome}</strong></td>
+          <td>R$ ${prod.preco.toFixed(2).replace('.', ',')}</td>
+          <td>
+            <input type="number" min="1" step="1" value="${qtd}" class="input-qtd" onchange="atualizarQuantidadeItem(${prod.id}, this.value)">
+          </td>
+          <td><strong>R$ ${sub.toFixed(2).replace('.', ',')}</strong></td>
+          <td style="text-align: center;">
+            <button class="btn btn-danger" onclick="excluirItemCarrinho(${prod.id})">Excluir</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+
+      const total = subtotal + TAXA_ENTREGA;
+      document.getElementById("carrinho-subtotal").textContent = `R$ ${subtotal.toFixed(2).replace('.', ',')}`;
+      document.getElementById("carrinho-total").textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+      document.getElementById("chk-total-valor").textContent = `R$ ${total.toFixed(2).replace('.', ',')}`;
+    }
+
+    function atualizarQuantidadeItem(id, valor) {
+      const qtd = parseInt(valor);
+      if (!Number.isInteger(qtd) || qtd <= 0) {
+        mostrarToast("A quantidade deve ser um número inteiro positivo.");
+        renderizarCarrinho();
+        return;
+      }
+      carrinho[id] = qtd;
+      atualizarBadge();
+      renderizarCarrinho();
+    }
+
+    function excluirItemCarrinho(id) {
+      delete carrinho[id];
+      atualizarBadge();
+      renderizarCarrinho();
+      mostrarToast("Item retirado do carrinho.");
+    }
+
+    function trocarMetodoPgto() {
+      const pix = document.querySelector('input[name="forma-pgto"][value="PIX"]').checked;
+      document.getElementById("pgto-pix-bloco").hidden = !pix;
+      document.getElementById("pgto-cartao-bloco").hidden = pix;
+    }
+
+    function finalizarPedido() {
+      const endereco = document.getElementById("chk-rua").value.trim();
+      if (!endereco) {
+        mostrarToast("Preencha o endereço completo para a entrega.");
+        return;
+      }
+
+      const ids = Object.keys(carrinho).filter(id => carrinho[id] > 0);
+      if (ids.length === 0) {
+        mostrarToast("Seu carrinho está vazio! Adicione cupcakes antes.");
+        return;
+      }
+
+      const forma = document.querySelector('input[name="forma-pgto"]:checked').value;
+      let subtotal = 0;
+      ids.forEach(id => {
+        const prod = CATALOGO.find(p => p.id === parseInt(id));
+        subtotal += prod.preco * carrinho[id];
+      });
+      const total = subtotal + TAXA_ENTREGA;
+
+      pedidoAtivo = {
+        id: Math.floor(1000 + Math.random() * 9000),
+        cliente: document.getElementById("chk-nome").value || "Cliente",
+        endereco: endereco,
+        formaPgto: forma === "PIX" ? "PIX" : "Cartão de Crédito",
+        statusPgto: "CONFIRMADO",
+        statusEntrega: "PREPARANDO",
+        total: total
+      };
+
+      document.getElementById("rastreio-id").textContent = `Pedido #${pedidoAtivo.id}`;
+      document.getElementById("rastreio-end-texto").textContent = pedidoAtivo.endereco;
+      document.getElementById("rastreio-forma-texto").textContent = pedidoAtivo.formaPgto;
+      document.getElementById("rastreio-valor-texto").textContent = `R$ ${pedidoAtivo.total.toFixed(2).replace('.', ',')}`;
+
+      document.getElementById("op-pedido-num").textContent = `#${pedidoAtivo.id}`;
+      document.getElementById("op-cliente-nome").textContent = pedidoAtivo.cliente;
+      document.getElementById("op-endereco-texto").textContent = pedidoAtivo.endereco;
+      document.getElementById("op-total-texto").textContent = `R$ ${pedidoAtivo.total.toFixed(2).replace('.', ',')}`;
+
+      carrinho = {};
+      atualizarBadge();
+      navegarPara("rastreio");
+      mostrarToast(`🎉 Pedido #${pedidoAtivo.id} confirmado e pago com sucesso!`);
+    }
+
+    const FLUXO_STATUS = ["RECEBIDO", "PREPARANDO", "EM_ROTA", "ENTREGUE"];
+    function progredirStatusOperador() {
+      let idx = FLUXO_STATUS.indexOf(pedidoAtivo.statusEntrega);
+      if (idx < FLUXO_STATUS.length - 1) {
+        pedidoAtivo.statusEntrega = FLUXO_STATUS[idx + 1];
+      } else {
+        pedidoAtivo.statusEntrega = FLUXO_STATUS[0];
+      }
+      atualizarInterfaceStatus();
+      mostrarToast(`Status do Pedido #${pedidoAtivo.id} atualizado.`);
+    }
+
+    function atualizarInterfaceStatus() {
+      const tag = document.getElementById("op-status-tag");
+      const msg = document.getElementById("rastreio-mensagem-status");
+      const s1 = document.getElementById("step-1");
+      const s2 = document.getElementById("step-2");
+      const s3 = document.getElementById("step-3");
+      const s4 = document.getElementById("step-4");
+
+      [s1, s2, s3, s4].forEach(s => s.className = "step-item");
+
+      if (pedidoAtivo.statusEntrega === "RECEBIDO") {
+        s1.className = "step-item completed";
+        tag.textContent = "Recebido";
+        tag.style.background = "#e3f2fd";
+        tag.style.color = "#1565c0";
+        msg.innerHTML = "📥 <strong>Pedido recebido:</strong> O pedido foi registrado com sucesso e está na fila da cozinha.";
+      } else if (pedidoAtivo.statusEntrega === "PREPARANDO") {
+        s1.className = "step-item completed";
+        s2.className = "step-item active";
+        tag.textContent = "Em Preparo";
+        tag.style.background = "#fff3e0";
+        tag.style.color = "#e65100";
+        msg.innerHTML = "🧁 <strong>Na cozinha:</strong> Seus cupcakes estão sendo finalizados artesanalmente com ingredientes frescos.";
+      } else if (pedidoAtivo.statusEntrega === "EM_ROTA") {
+        s1.className = "step-item completed";
+        s2.className = "step-item completed";
+        s3.className = "step-item active";
+        tag.textContent = "Em Rota";
+        tag.style.background = "#f3e5f5";
+        tag.style.color = "#7b1fa2";
+        msg.innerHTML = "🛵 <strong>A caminho:</strong> O entregador já retirou sua encomenda e está em rota de entrega rápida.";
+      } else if (pedidoAtivo.statusEntrega === "ENTREGUE") {
+        s1.className = "step-item completed";
+        s2.className = "step-item completed";
+        s3.className = "step-item completed";
+        s4.className = "step-item completed";
+        tag.textContent = "Entregue";
+        tag.style.background = "#e8f5e9";
+        tag.style.color = "#2e7d32";
+        msg.innerHTML = "✨ <strong>Pedido entregue:</strong> Aproveite seus cupcakes artesanais! Agradecemos pela preferência.";
+      }
+    }
+
+    function navegarPara(telaId) {
+      document.querySelectorAll("main > section").forEach(sec => sec.hidden = sec.id !== telaId);
+      document.querySelectorAll("nav button").forEach(btn => {
+        btn.setAttribute("aria-current", btn.dataset.tela === telaId ? "page" : "false");
+      });
+      if (telaId === "carrinho") renderizarCarrinho();
+      if (telaId === "checkout") {
+        renderizarCarrinho();
+        if (Object.keys(carrinho).length === 0) {
+          mostrarToast("Adicione cupcakes ao carrinho antes de ir ao checkout.");
+          navegarPara("vitrine");
+          return;
+        }
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    document.querySelectorAll("nav button").forEach(btn => {
+      btn.addEventListener("click", () => navegarPara(btn.dataset.tela));
+    });
+
+    function mostrarToast(mensagem) {
+      const toast = document.getElementById("toast");
+      toast.textContent = mensagem;
+      toast.style.display = "block";
+      setTimeout(() => { toast.style.display = "none"; }, 3500);
+    }
+
+    function executarLogin() {
+      const email = document.getElementById("login-email").value.trim();
+      const senha = document.getElementById("login-senha").value;
+      if (!email || !senha) {
+        mostrarToast("Preencha o e-mail e a senha.");
+        return;
+      }
+      usuarioLogado = { nome: "Cliente Demonstração", email: email };
+      atualizarHeaderUsuario();
+      mostrarToast(`Bem-vindo de volta, ${usuarioLogado.nome}!`);
+    }
+
+    function executarCadastro() {
+      const nome = document.getElementById("cad-nome").value.trim();
+      const email = document.getElementById("cad-email").value.trim();
+      const senha = document.getElementById("cad-senha").value;
+      if (!nome || !email || !senha) {
+        mostrarToast("Preencha todos os campos obrigatórios.");
+        return;
+      }
+      if (senha.length < 6) {
+        mostrarToast("A senha deve possuir pelo menos 6 caracteres.");
+        return;
+      }
+      usuarioLogado = { nome: nome, email: email };
+      atualizarHeaderUsuario();
+      mostrarToast(`Cadastro criado com sucesso, ${nome}!`);
+    }
+
+    function deslogarCliente() {
+      usuarioLogado = null;
+      atualizarHeaderUsuario();
+      mostrarToast("Você saiu da sua conta.");
+      navegarPara("vitrine");
+    }
+
+    // Inicialização
+    renderizarVitrine();
+    atualizarHeaderUsuario();
+    atualizarInterfaceStatus();
+  </script>
+</body>
+</html>

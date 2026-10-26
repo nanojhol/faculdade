@@ -1,0 +1,152 @@
+{% extends "base.html" %}
+
+{% block title %}Minha Conta — Sweet Cupcake Gourmet{% endblock %}
+
+{% block content %}
+{% if cliente %}
+  <!-- USUÁRIO AUTENTICADO: PERFIL COMPLETO -->
+  <div class="section-title">
+    <h2>Meu Perfil de Cliente</h2>
+    <p>Gerencie seus dados de entrega e consulte o histórico dos seus pedidos.</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+    <!-- Card de Dados Pessoais -->
+    <div class="card-cupcake">
+      <div style="display: flex; align-items: center; gap: 14px; margin-bottom: 20px;">
+        <div class="user-avatar-circle" style="width: 48px; height: 48px; font-size: 22px;">👤</div>
+        <div>
+          <h3 style="margin-bottom: 2px;">{{ cliente.nome }}</h3>
+          <span class="stock-tag" style="background:#e8f5e9; color:#2e7d32;">Cliente Verificado</span>
+        </div>
+      </div>
+
+      <div style="background: var(--bg-surface); padding: 16px; border-radius: var(--radius-sm); border: 1px solid var(--borda); margin-bottom: 20px;">
+        <p style="font-size: 13px; color: var(--marrom-medio); margin-bottom: 8px;">
+          <strong>E-mail:</strong> {{ cliente.email }}
+        </p>
+        <p style="font-size: 13px; color: var(--marrom-medio); margin-bottom: 8px;">
+          <strong>Telefone:</strong> {{ cliente.telefone or 'Não informado' }}
+        </p>
+        <p style="font-size: 13px; color: var(--marrom-medio);">
+          <strong>Endereço Padrão:</strong> {{ cliente.endereco_padrao or 'Não informado' }}
+        </p>
+      </div>
+
+      <div style="display: flex; gap: 10px;">
+        <a href="{{ url_for('routes.index') }}" class="btn btn-mel" style="flex: 1;">Ir à Vitrine</a>
+        <a href="{{ url_for('routes.logout') }}" class="btn btn-outline" style="color: var(--alerta-erro); border-color: var(--alerta-erro);">Sair da Conta</a>
+      </div>
+    </div>
+
+    <!-- Histórico de Pedidos do Cliente -->
+    <div class="card-cupcake">
+      <h3>Meus Pedidos Recentes</h3>
+      <p class="card-desc">Acompanhe a entrega dos seus cupcakes.</p>
+
+      {% if not pedidos %}
+        <div class="alert-box alert-info" style="margin-top: 14px;">
+          Você ainda não realizou nenhum pedido com esta conta.
+        </div>
+      {% else %}
+        <div class="table-container" style="box-shadow: none; margin-top: 14px;">
+          <table>
+            <thead>
+              <tr>
+                <th># Pedido</th>
+                <th>Data</th>
+                <th>Total</th>
+                <th>Status</th>
+                <th>Ação</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for p in pedidos %}
+              <tr>
+                <td><strong>#{{ p.id }}</strong></td>
+                <td><small>{{ p.data_pedido.split()[0] if p.data_pedido else 'Hoje' }}</small></td>
+                <td>R$ {{ "%.2f"|format(p.valor_total)|replace('.', ',') }}</td>
+                <td>
+                  {% if p.status_entrega == 'RECEBIDO' %}
+                    <span class="stock-tag" style="background:#e3f2fd; color:#1565c0; font-size:10px;">Recebido</span>
+                  {% elif p.status_entrega == 'PREPARANDO' %}
+                    <span class="stock-tag" style="background:#fff3e0; color:#e65100; font-size:10px;">Preparando</span>
+                  {% elif p.status_entrega == 'EM_ROTA' %}
+                    <span class="stock-tag" style="background:#f3e5f5; color:#7b1fa2; font-size:10px;">Em Rota</span>
+                  {% else %}
+                    <span class="stock-tag" style="background:#e8f5e9; color:#2e7d32; font-size:10px;">Entregue</span>
+                  {% endif %}
+                </td>
+                <td>
+                  <a href="{{ url_for('routes.rastreio', id=p.id) }}" class="btn btn-outline" style="padding: 4px 10px; font-size: 11px;">Rastrear</a>
+                </td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+        </div>
+      {% endif %}
+    </div>
+  </div>
+
+{% else %}
+  <!-- USUÁRIO NÃO AUTENTICADO: LOGIN E CADASTRO -->
+  <div class="section-title">
+    <h2>Identificação do Cliente</h2>
+    <p>Acesse com sua conta para acompanhar seus pedidos ou cadastre-se em instantes.</p>
+  </div>
+
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+    <!-- Formulário de Login -->
+    <div class="card-cupcake">
+      <h3>Já possui uma conta?</h3>
+      <p class="card-desc">Entre com seu e-mail e senha cadastrados para acessar seus pedidos.</p>
+      <form action="{{ url_for('routes.login') }}" method="POST">
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" name="email" class="form-control" placeholder="cliente@exemplo.com" required>
+        </div>
+        <div class="form-group">
+          <label>Senha</label>
+          <input type="password" name="senha" class="form-control" placeholder="••••••••" required>
+        </div>
+        <button type="submit" class="btn btn-chocolate" style="width: 100%;">Acessar Minha Conta</button>
+      </form>
+      <div style="margin-top: 16px; font-size: 12px; color: var(--marrom-medio); background: var(--bg-surface); padding: 10px 14px; border-radius: var(--radius-sm); border: 1px solid var(--borda);">
+        💡 <strong>Conta de demonstração:</strong><br>
+        E-mail: <code>cliente@exemplo.com</code><br>
+        Senha: <code>demo123</code>
+      </div>
+    </div>
+
+    <!-- Formulário de Cadastro -->
+    <div class="card-cupcake">
+      <h3>Primeira vez na loja? Cadastre-se</h3>
+      <p class="card-desc">Leva menos de 1 minuto para preencher e liberar seus pedidos.</p>
+      <form action="{{ url_for('routes.cadastrar') }}" method="POST">
+        <div class="form-group">
+          <label>Nome Completo</label>
+          <input type="text" name="nome" class="form-control" placeholder="Seu nome completo" required>
+        </div>
+        <div class="form-group">
+          <label>E-mail</label>
+          <input type="email" name="email" class="form-control" placeholder="seu@email.com" required>
+        </div>
+        <div class="form-group">
+          <label>Telefone / WhatsApp</label>
+          <input type="text" name="telefone" class="form-control" placeholder="(11) 98765-4321">
+        </div>
+        <div class="form-group">
+          <label>Endereço Habitual de Entrega</label>
+          <input type="text" name="endereco" class="form-control" placeholder="Rua das Flores, 123 - Centro">
+        </div>
+        <div class="form-group">
+          <label>Senha (mínimo 6 caracteres)</label>
+          <input type="password" name="senha" class="form-control" placeholder="••••••••" minlength="6" required>
+        </div>
+        <button type="submit" class="btn btn-mel" style="width: 100%;">Criar Meu Cadastro ➔</button>
+      </form>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

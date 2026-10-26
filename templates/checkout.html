@@ -1,0 +1,98 @@
+{% extends "base.html" %}
+
+{% block title %}Checkout e Pagamento — Sweet Cupcake Gourmet{% endblock %}
+
+{% block content %}
+<div class="section-title">
+  <h2>Finalização e Pagamento</h2>
+  <p>Informe os dados de entrega na região e escolha o método de pagamento.</p>
+</div>
+
+<form action="{{ url_for('routes.processar_checkout') }}" method="POST">
+  <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 24px;">
+    <!-- Endereço de Entrega -->
+    <div class="card-cupcake">
+      <h3>1. Endereço de Entrega</h3>
+      <p class="card-desc">Entrega expressa realizada em 15 a 30 minutos na região de proximidade.</p>
+
+      <div class="form-group">
+        <label>Nome do Destinatário</label>
+        <input type="text" name="nome_destinatario" class="form-control" value="{{ session.get('cliente_nome', 'Cliente Demonstração') }}" required>
+      </div>
+      <div class="form-group">
+        <label>Rua, Número e Bairro</label>
+        <input type="text" name="endereco_entrega" class="form-control" placeholder="Ex: Rua das Flores, 123 - Centro" required>
+      </div>
+      <div class="form-group">
+        <label>Complemento / Ponto de Referência</label>
+        <input type="text" name="complemento" class="form-control" placeholder="Apto 42, Bloco B">
+      </div>
+      <div class="form-group">
+        <label>Observações para a Cozinha / Entrega</label>
+        <input type="text" name="observacoes" class="form-control" placeholder="Ex: Caprichar no lacinho de presente">
+      </div>
+      <div class="alert-box alert-info" style="margin-bottom: 0;">
+        ⏱ <strong>Prazo:</strong> 15 a 30 minutos • 🚚 <strong>Taxa fixa:</strong> R$ 6,00.
+      </div>
+    </div>
+
+    <!-- Pagamento -->
+    <div class="card-cupcake">
+      <h3>2. Forma de Pagamento</h3>
+      <p class="card-desc">Escolha como prefere pagar o seu pedido demonstrativo.</p>
+
+      <div style="margin-bottom: 18px; display: flex; flex-direction: column; gap: 10px;">
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; padding: 12px; border: 1px solid var(--borda); border-radius: var(--radius-sm); background: var(--bg-surface);">
+          <input type="radio" name="forma_pagamento" value="PIX" checked onchange="alternarMetodoPgto(this.value)">
+          <span>⚡ PIX (Confirmação Imediata via QR Code)</span>
+        </label>
+        <label style="display: flex; align-items: center; gap: 10px; cursor: pointer; font-weight: 600; padding: 12px; border: 1px solid var(--borda); border-radius: var(--radius-sm); background: var(--bg-surface);">
+          <input type="radio" name="forma_pagamento" value="CARTAO_CREDITO" onchange="alternarMetodoPgto(this.value)">
+          <span>💳 Cartão de Crédito (Simulação de Autorização)</span>
+        </label>
+      </div>
+
+      <!-- Bloco PIX -->
+      <div id="box-pix" style="background: #fdf6ec; border: 1px solid #fae1af; border-radius: var(--radius-sm); padding: 16px;">
+        <p style="font-size: 13px; font-weight: 600; color: var(--chocolate); margin-bottom: 8px;">Chave PIX Copia e Cola (Demonstrativa):</p>
+        <input type="text" readonly value="00020126580014br.gov.bcb.pix0136sweetcupcake-gourmet-pit2" class="form-control" style="font-family: monospace; font-size: 11px; background: white;">
+        <p style="font-size: 12px; color: var(--marrom-medio); margin-top: 6px;">O pagamento é simulado e formalizado instantaneamente no sistema ao confirmar.</p>
+      </div>
+
+      <!-- Bloco Cartão -->
+      <div id="box-cartao" hidden style="background: var(--bg-surface); border: 1px solid var(--borda); border-radius: var(--radius-sm); padding: 16px;">
+        <div class="form-group">
+          <label>Número do Cartão</label>
+          <input type="text" class="form-control" placeholder="0000 0000 0000 0000" maxlength="19">
+        </div>
+        <div style="display: flex; gap: 10px;">
+          <div class="form-group" style="flex: 1;">
+            <label>Validade</label>
+            <input type="text" class="form-control" placeholder="MM/AA" maxlength="5">
+          </div>
+          <div class="form-group" style="flex: 1;">
+            <label>CVV</label>
+            <input type="text" class="form-control" placeholder="123" maxlength="3">
+          </div>
+        </div>
+      </div>
+
+      <div style="margin-top: 20px; border-top: 1px dashed var(--borda); padding-top: 16px;">
+        <div class="summary-row total" style="border:none; margin:0 0 16px 0; padding:0;">
+          <span>Total a pagar:</span>
+          <span>R$ {{ "%.2f"|format(total)|replace('.', ',') }}</span>
+        </div>
+        <button type="submit" class="btn btn-mel" style="width: 100%; font-size: 15px;">Confirmar e Finalizar Pedido ➔</button>
+      </div>
+    </div>
+  </div>
+</form>
+
+<script>
+  function alternarMetodoPgto(tipo) {
+    const isPix = tipo === 'PIX';
+    document.getElementById('box-pix').hidden = !isPix;
+    document.getElementById('box-cartao').hidden = isPix;
+  }
+</script>
+{% endblock %}

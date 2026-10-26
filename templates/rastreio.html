@@ -1,0 +1,105 @@
+{% extends "base.html" %}
+
+{% block title %}Acompanhamento do Pedido — Sweet Cupcake Gourmet{% endblock %}
+
+{% block content %}
+<div class="section-title" style="text-align: center;">
+  <h2>Acompanhamento em Tempo Real</h2>
+  <p>Consulte a situação do preparo e da entrega do seu pedido gourmet.</p>
+</div>
+
+{% if not pedido %}
+  <div class="alert-box alert-info" style="max-width: 600px; margin: 0 auto;">
+    Você ainda não possui nenhum pedido registrado recentemente. Visite a nossa <a href="{{ url_for('routes.index') }}" style="color: inherit; font-weight: 700; margin-left: 4px;">Vitrine</a> para realizar a sua primeira compra!
+  </div>
+{% else %}
+  <div class="timeline-container">
+    <div style="display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--borda); padding-bottom: 14px; flex-wrap: wrap; gap: 10px;">
+      <div>
+        <h3 style="font-family:'Playfair Display', Georgia, serif; font-size: 22px; color: var(--chocolate);">
+          Pedido #{{ pedido.id }}
+        </h3>
+        <p style="font-size: 13px; color: var(--marrom-medio);">
+          Data: {{ pedido.data_pedido }} • Prazo estimado: {{ pedido.prazo_estimado }}
+        </p>
+      </div>
+      <div>
+        <span class="stock-tag" style="background:#e8f5e9; color:#2e7d32; font-size:12px; padding:6px 14px;">
+          Pagamento: {{ pedido.status_pagamento }} ({{ pedido.forma_pagamento }})
+        </span>
+      </div>
+    </div>
+
+    <!-- Linha do Tempo / Timeline -->
+    <div class="timeline-steps">
+      <div class="step-item {% if pedido.status_entrega in ['RECEBIDO', 'PREPARANDO', 'EM_ROTA', 'ENTREGUE'] %}completed{% endif %}">
+        1. Recebido
+      </div>
+      <div class="step-item {% if pedido.status_entrega == 'PREPARANDO' %}active{% elif pedido.status_entrega in ['EM_ROTA', 'ENTREGUE'] %}completed{% endif %}">
+        2. Em Preparo
+      </div>
+      <div class="step-item {% if pedido.status_entrega == 'EM_ROTA' %}active{% elif pedido.status_entrega == 'ENTREGUE' %}completed{% endif %}">
+        3. Em Rota
+      </div>
+      <div class="step-item {% if pedido.status_entrega == 'ENTREGUE' %}completed{% endif %}">
+        4. Entregue
+      </div>
+    </div>
+
+    <div class="alert-box alert-info">
+      {% if pedido.status_entrega == 'RECEBIDO' %}
+        📥 <strong>Pedido recebido:</strong> Registrado na cozinha e aguardando o início da montagem.
+      {% elif pedido.status_entrega == 'PREPARANDO' %}
+        🧁 <strong>Na cozinha:</strong> Seus cupcakes estão sendo confeitados artesanalmente com carinho.
+      {% elif pedido.status_entrega == 'EM_ROTA' %}
+        🛵 <strong>A caminho:</strong> O entregador já saiu da confeitaria e está a caminho do seu endereço!
+      {% else %}
+        ✨ <strong>Entregue com sucesso:</strong> Esperamos que saboreie cada mordida! Bom apetite.
+      {% endif %}
+    </div>
+
+    <!-- Itens do Pedido -->
+    <h4 style="font-family:'Playfair Display', Georgia, serif; font-size: 17px; margin: 20px 0 10px; color: var(--chocolate);">
+      Composição do Pedido:
+    </h4>
+    <div class="table-container" style="box-shadow: none; margin-bottom: 20px;">
+      <table>
+        <thead>
+          <tr>
+            <th>Cupcake</th>
+            <th>Qtd</th>
+            <th>Preço Unit.</th>
+            <th>Subtotal</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for item in pedido.itens %}
+          <tr>
+            <td><strong>{{ item.produto_nome }}</strong></td>
+            <td>{{ item.quantidade }}x</td>
+            <td>R$ {{ "%.2f"|format(item.preco_unitario)|replace('.', ',') }}</td>
+            <td><strong>R$ {{ "%.2f"|format(item.subtotal)|replace('.', ',') }}</strong></td>
+          </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    </div>
+
+    <!-- Detalhes do Envio -->
+    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; font-size: 14px; background: var(--bg-surface); padding: 18px; border-radius: var(--radius-sm); border: 1px solid var(--borda);">
+      <div>
+        <p style="color: var(--marrom-medio); font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing:0.05em;">Destino</p>
+        <p><strong>{{ pedido.endereco_entrega }}</strong></p>
+      </div>
+      <div>
+        <p style="color: var(--marrom-medio); font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing:0.05em;">Forma de Pagamento</p>
+        <p><strong>{{ pedido.forma_pagamento }}</strong></p>
+      </div>
+      <div>
+        <p style="color: var(--marrom-medio); font-size: 11px; text-transform: uppercase; font-weight: 700; letter-spacing:0.05em;">Total Pago (c/ frete)</p>
+        <p><strong style="color: var(--chocolate); font-size: 16px;">R$ {{ "%.2f"|format(pedido.valor_total)|replace('.', ',') }}</strong></p>
+      </div>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}

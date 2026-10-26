@@ -1,0 +1,80 @@
+{% extends "base.html" %}
+
+{% block title %}Seu Carrinho — Sweet Cupcake Gourmet{% endblock %}
+
+{% block content %}
+<div class="section-title">
+  <h2>Seu Carrinho de Compras</h2>
+  <p>Revise os cupcakes selecionados, ajuste as quantidades ou remova itens.</p>
+</div>
+
+{% if not itens %}
+  <div class="alert-box alert-info">
+    🧁 Seu carrinho está vazio no momento. Visite a <a href="{{ url_for('routes.index') }}" style="color: inherit; font-weight: 700; margin-left: 4px;">Vitrine</a> para escolher seus cupcakes artesanais!
+  </div>
+{% else %}
+  <div class="table-container">
+    <table>
+      <thead>
+        <tr>
+          <th>Sabor do Cupcake</th>
+          <th>Preço Unitário</th>
+          <th style="width: 150px;">Quantidade</th>
+          <th>Subtotal</th>
+          <th style="width: 100px; text-align: center;">Ações</th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for item in itens %}
+        <tr>
+          <td>
+            <strong>
+              {% if item.produto.nome == 'Chocolate' %}🍫
+              {% elif item.produto.nome == 'Ninho com Brigadeiro' %}🥛
+              {% elif item.produto.nome == 'Ninho com Morango' %}🍓
+              {% elif item.produto.nome == 'Nutella' %}🌰
+              {% else %}🍯{% endif %}
+              {{ item.produto.nome }}
+            </strong>
+          </td>
+          <td>R$ {{ "%.2f"|format(item.produto.preco)|replace('.', ',') }}</td>
+          <td>
+            <form action="{{ url_for('routes.atualizar_carrinho') }}" method="POST" style="display: flex; gap: 6px;">
+              <input type="hidden" name="produto_id" value="{{ item.produto.id }}">
+              <input type="number" name="quantidade" value="{{ item.quantidade }}" min="1" step="1" class="input-qtd" style="width: 60px;">
+              <button type="submit" class="btn btn-outline" style="padding: 6px 10px; font-size: 11px;">OK</button>
+            </form>
+          </td>
+          <td><strong>R$ {{ "%.2f"|format(item.subtotal)|replace('.', ',') }}</strong></td>
+          <td style="text-align: center;">
+            <form action="{{ url_for('routes.remover_carrinho') }}" method="POST">
+              <input type="hidden" name="produto_id" value="{{ item.produto.id }}">
+              <button type="submit" class="btn btn-danger">Excluir</button>
+            </form>
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+
+  <div class="summary-card">
+    <div class="summary-row">
+      <span>Subtotal dos cupcakes:</span>
+      <strong>R$ {{ "%.2f"|format(subtotal)|replace('.', ',') }}</strong>
+    </div>
+    <div class="summary-row">
+      <span>Taxa de entrega (região próxima):</span>
+      <strong>R$ {{ "%.2f"|format(taxa_entrega)|replace('.', ',') }}</strong>
+    </div>
+    <div class="summary-row total">
+      <span>Total a pagar:</span>
+      <span>R$ {{ "%.2f"|format(total)|replace('.', ',') }}</span>
+    </div>
+    <div style="margin-top: 20px; display: flex; gap: 12px;">
+      <a href="{{ url_for('routes.index') }}" class="btn btn-outline">Continuar Comprando</a>
+      <a href="{{ url_for('routes.checkout') }}" class="btn btn-mel" style="flex: 1;">Avançar para Checkout ➔</a>
+    </div>
+  </div>
+{% endif %}
+{% endblock %}
