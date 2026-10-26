@@ -43,7 +43,7 @@
 | **Modo de Codificação** | **( x ) Tradicional** &nbsp;&nbsp; ( ) Low-code &nbsp;&nbsp; ( ) No-code |
 | **Link do repositório no GitHub com os códigos abertos** | [https://github.com/nanojhol/faculdade](https://github.com/nanojhol/faculdade) |
 | **Link da solução em funcionamento** | [https://github.com/nanojhol/faculdade](https://github.com/nanojhol/faculdade) *(a ser complementado com o link da Vercel após a publicação final)* |
-| **Link do vídeo narrado (no mínimo 5 min)** | *[Pendente de gravação pelo estudante — Link a ser inserido antes do envio no AVA]* |
+| **Link do vídeo narrado (no mínimo 5 min)** | [https://drive.google.com/file/d/12bklwOwWQj-rv4l9tdy3alV2JBYcRW6Z/view?usp=sharing](https://drive.google.com/file/d/12bklwOwWQj-rv4l9tdy3alV2JBYcRW6Z/view?usp=sharing) |
 
 ---
 
@@ -153,4 +153,4 @@ Todas as 5 solicitações de melhoria foram completamente atendidas, integradas 
 
 | Campo | Conteúdo |
 |---|---|
-| **Link para o vídeo** | *[Pendente de gravação pelo estudante — Link a ser inserido antes do envio no AVA]* |
+| **Link para o vídeo** | [https://drive.google.com/file/d/1gABOvdbkX8GcKXJ52Y0FH_O5SLFUSaRq/view?usp=sharing](https://drive.google.com/file/d/1gABOvdbkX8GcKXJ52Y0FH_O5SLFUSaRq/view?usp=sharing) |

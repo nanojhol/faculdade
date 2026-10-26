@@ -69,6 +69,8 @@ Vou seguir as três situações propostas pela faculdade. Vou registrar aqui o q
 - [x] Fazer as correções pertinentes, testar as alterações e atualizar a documentação.
 - [x] Preparar o laudo de qualidade com os erros, as correções e as evidências.
 - [x] Preencher o modelo oficial de entrega da faculdade (`Relatorio_PIT_II.md` e arquivo DOCX institucional para submissão no AVA).
+- [x] Gravar e anexar o Vídeo 1 narrado da solução (V1 — Apresentação Geral do Sistema).
+- [x] Gravar e anexar o Vídeo 2 narrado da solução (V2 — Apresentação das Melhorias e Correções).
 - [ ] Conferir as instruções de envio no AVA, entregar e guardar o comprovante.
 
 **Ainda falta fazer:** conferência final e submissão da atividade no AVA.
@@ -143,7 +145,8 @@ A partir dos 5 ciclos de testes de usabilidade e engenharia, foram identificados
 | Definição comercial e banco de dados | Defini os 5 sabores de cupcakes, descrições, preços, taxa fixa de R$ 6,00 e prazo de 15 a 30 min. Elaborei os modelos conceitual e lógico (3FN), executei o script físico em SQLite e criei o dicionário de dados. Atualizei o protótipo com os 5 sabores e cálculo real | SQLite, SQL (schema.sql), Markdown e HTML/CSS/JS para viabilizar a estrutura de dados e regras antes da codificação | Iniciar a estrutura da aplicação MVC em Python/Flask |
 | Desenvolvimento MVC e aprimoramento visual | Implementei a aplicação completa em padrão MVC (`models/database.py`, `controllers/routes.py`, `templates/`, `static/`), integrei fotos reais nos cards dos 5 cupcakes, destaquei o perfil do usuário logado na barra superior, criei a tela de perfil de cliente e elaborei o manual de uso | Python, Flask, Jinja2, SQLite, CSS com direção de arte editorial de confeitaria e Markdown | Preparar deploy e testes da solução |
 | Relatório oficial e laudo de testes | Elaborei o relatório completo de entrega da atividade contendo as tabelas de codificação, os 5 testes de usabilidade com participantes, o laudo de qualidade com correções comprovadas e o manual de execução | Python-docx, Markdown e Microsoft Word para formatação rigorosa no modelo institucional | Validação final de entrega e submissão no AVA |
-| Melhorias de Usabilidade e Homologação | Implementei o auto-avanço de 10s no rastreio, carrinho assíncrono via AJAX, pré-cadastro no checkout, layout de navbar em linha única e criei as 5 contas de teste no SQLite (senha `123456`) com pedidos reais sorteados | Python, Flask, SQLite, JavaScript Assíncrono, CSS Flexbox e suite de testes automatizada | Gravação dos vídeos demonstrativos e envio |
+| Melhorias de Usabilidade e Homologação | Implementei o auto-avanço de 10s no rastreio, carrinho assíncrono via AJAX, pré-cadastro no checkout, layout de navbar em linha única e criei as 5 contas de teste no SQLite (senha `123456`) com pedidos reais sorteados | Python, Flask, SQLite, JavaScript Assíncrono, CSS Flexbox e suite de testes automatizada | Gravação dos vídeos demonstrativos |
+| Vídeos Demonstrativos e Fechamento | Gravação dos vídeos narrados da V1 (Apresentação Geral) e da V2 (Melhorias e Correções), com integração direta de ambos os links no relatório oficial Word e Markdown | Google Drive, OBS Studio / Gravador de Tela, Python-docx e Markdown | Submissão final no AVA |
 
 A cada etapa, vou anotar o que fiz, quais arquivos mexi, a ferramenta que usei e o motivo. Se precisar corrigir alguma coisa, vou registrar a mudança sem apagar o que fiz antes.
 
