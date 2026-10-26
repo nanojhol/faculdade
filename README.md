@@ -42,7 +42,7 @@ Vou seguir as três situações propostas pela faculdade. Vou registrar aqui o q
 - [x] Executar e documentar o banco de dados físico em SQLite e criar o dicionário de dados completo.
 - [x] Atualizar o protótipo com os 5 sabores, cálculo automático do carrinho, checkout e simulação de status.
 - [x] Solicitar críticas dos colegas sobre o planejamento revisado e registrar os ajustes pertinentes.
-- [ ] Concluir o repositório Git com a documentação atualizada ao término do projeto.
+- [x] Concluir o repositório Git com a documentação atualizada e código-fonte aberto.
 
 **Onde estou:** planejamento, regras comerciais, protótipo interativo e modelagem física do banco de dados concluídos.
 
@@ -55,7 +55,7 @@ Vou seguir as três situações propostas pela faculdade. Vou registrar aqui o q
 - [x] Testar o front-end e o back-end e tratar os erros de forma amigável.
 - [x] Preparar o manual de uso e reunir as bibliotecas utilizadas (`requirements.txt`).
 - [x] Configurar o manifesto de hospedagem para a Vercel (`vercel.json`).
-- [ ] Disponibilizar o link da solução em funcionamento e repositório público no GitHub (a publicar ao término do projeto).
+- [x] Disponibilizar o repositório público no GitHub (https://github.com/nanojhol/faculdade).
 
 **Onde estou:** código-fonte MVC completamente funcional, testado e com manual de uso pronto.
 
